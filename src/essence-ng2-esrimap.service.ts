@@ -13,9 +13,13 @@ export class EssenceNg2EsriMapService {
     }
 
     loadEsriApi(): any {
-        return this.esriLoader.load({url: this.apiUrl})['then'](() => {
-            window['esriMapHasLoad'] = true;
-        });
+    	if (!window['esriMapHasLoad']) {
+			return this.esriLoader.load({url: this.apiUrl})['then'](() => {
+				window['esriMapHasLoad'] = true;
+			});
+		} else {
+			return Promise.resolve();
+		}
     }
 
     loadEsriModules(modules: string[]): Promise<any> {

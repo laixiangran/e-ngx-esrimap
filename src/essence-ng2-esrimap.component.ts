@@ -64,13 +64,9 @@ export class EssenceNg2EsriMapComponent implements OnInit {
             return;
         }
 
-        if (!window['esriMapHasLoad']) {
-            this.loadEsriApi().then(() => {
-                this.initMap();
-            });
-        } else {
-            this.initMap();
-        }
+		this.loadEsriApi().then(() => {
+			this.initMap();
+		});
     }
 
     /**
