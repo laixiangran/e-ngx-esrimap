@@ -8,3 +8,4 @@ CHANGELOG.md
 .angular-cli.json
 aot/
 temp/
+gulpfile.js
