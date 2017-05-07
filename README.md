@@ -1,6 +1,6 @@
 # essence-ng2-esrimap
 
-essence-ng2-esrimap is a esrimap component for Angular..
+essence-ng2-esrimap is a esrimap component for Angular.
 
 ## Usage
 
@@ -10,9 +10,10 @@ essence-ng2-esrimap is a esrimap component for Angular..
 	npm install --save essence-ng2-esrimap@latest
 	```
 	
-2. 在index.html引入font-awesome
+2. 在index.html引入font-awesome、esri.css
 
 	```html
+	<link rel="stylesheet" href="http://js.arcgis.com/3.14/esri/css/esri.css">
 	<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 	```
 
