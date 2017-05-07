@@ -1,0 +1,12 @@
+<div class="app_main">
+	<h1>esrimap Component for Angular</h1>
+	<div style="height: 600px;">
+		<essence-ng2-esrimap
+			(mapReady)="onMapReady($event)"
+			(exentChange)="onExentChange($event)"
+			[mapType]="'tdt'"
+			[mapUrl]="['vec_c', 'cva_c']"
+			[initExtent]="initExtent">
+		</essence-ng2-esrimap>
+	</div>
+</div>
