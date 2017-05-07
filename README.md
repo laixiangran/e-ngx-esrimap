@@ -1,29 +1,28 @@
-# essence-ng2-calendar
+# essence-ng2-esrimap
 
-essence-ng2-calendar is a calendar component for Angular.
+essence-ng2-esrimap is a esrimap component for Angular..
 
 ## Usage
 
 1. Install
 
 	```shell
-	npm install --save essence-ng2-calendar@latest
+	npm install --save essence-ng2-esrimap@latest
 	```
 	
-2. 在index.html引入font-awesome、bootstrap
+2. 在index.html引入font-awesome
 
 	```html
-	<link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 	```
 
 3. Add the EssenceNg2CalendarModule
 
 	```typescript
-	import {EssenceNg2CalendarModule} from "essence-ng2-calendar";
+	import {EssenceNg2EsriMapModule} from "essence-ng2-esrimap";
 	@NgModule({
 	    imports: [
-	        EssenceNg2CalendarModule
+	        EssenceNg2EsriMapModule
 	    ]
 	})
 	```
@@ -31,65 +30,38 @@ essence-ng2-calendar is a calendar component for Angular.
 4. Use in the template
 
 	```html
-	<h2>显示日程安排</h2>
-    <essence-ng2-calendar [schedules]="schedules"
-                          (onAddSchedule)="onAddSchedule($event)"
-                          (onViewAllSchedule)="onViewAllSchedule($event)"
-                          (onViewSchedule)="onViewSchedule($event)"
-                          (dateChange)="onDateChange($event)">
-    </essence-ng2-calendar>
-    
-    <h2>不显示日程安排</h2>
-    <essence-ng2-calendar (dateChange)="onDateChange($event)"></essence-ng2-calendar>
+	<essence-ng2-esrimap
+		(mapReady)="onMapReady($event)"
+		(exentChange)="onExentChange($event)"
+		[mapType]="'tdt'"
+		[mapUrl]="['vec_c', 'cva_c']"
+		[initExtent]="initExtent">
+	</essence-ng2-esrimap>
 	```
 
 5. Use in the component
 
 	```typescript
-	schedules: any;
+	esriMapComponent: EssenceNg2EsriMapComponent;
+
+    initExtent: any = {
+        xmax: 116.75667048654691,
+        xmin: 115.97389460764066,
+        ymax: 40.12732707113387,
+        ymin: 39.71533976644637
+    };
+
+    onMapReady ($event: EssenceNg2EsriMapComponent) {
+        this.esriMapComponent = $event;
+        this.esriMapComponent.loadEsriModules(["esri/symbols/SimpleMarkerSymbol"])
+            .then(([SimpleMarkerSymbol]) => {
+            
+                this.SimpleMarkerSymbol = SimpleMarkerSymbol;
+        });
+    }
     
-    constructor () {
-        this.schedules = [
-            {
-                date: new Date(2017, 4, 6),
-                data: [
-                    {
-                        title: '参加会议',
-                        address: '公司会议室',
-                        content: '讨论考核制度',
-                        info: '参会人员包括：张三、李四',
-                        start_time: new Date(2017, 0, 18),
-                        end_time: new Date(new Date(2017, 0, 18).getTime() + 3600000),
-                        remind_time: new Date(new Date(2017, 0, 18).getTime() - 3600000)
-                    },
-                    {
-                        title: '参加会议',
-                        address: '公司会议室',
-                        content: '讨论考核制度',
-                        info: '参会人员包括：张三、李四',
-                        start_time: new Date(2017, 0, 18),
-                        end_time: new Date(new Date(2017, 0, 18).getTime() + 3600000),
-                        remind_time: new Date(new Date(2017, 0, 18).getTime() - 3600000)
-                    }
-                ]
-            }
-        ]
-    }
-
-    onDateChange ($event: Date) {
-        // console.log($event);
-    }
-
-    onAddSchedule ($event: any) {
-        // console.log($event);
-    }
-
-    onViewAllSchedule ($event: any) {
-        // console.log($event);
-    }
-
-    onViewSchedule ($event: any) {
-        // console.log($event);
+    onExentChange (event: any) {
+        console.log(event);
     }
 	```
 
@@ -97,40 +69,25 @@ essence-ng2-calendar is a calendar component for Angular.
 
 ### Inputs
 
-- `schedules`（`?any=null`） - 日程安排，对象数组格式如下：
-```typescript
-[
-    {
-        id: '00001', // 日程安排id
-        date: new Date(), // 日程安排日期，Date类型
-        data: [
-            {
-                title: '参加会议', // 日程安排标题
-                address: '公司会议室', // 日程安排地点
-                content: '讨论考核制度', // 日程安排内容
-                info: '参会人员包括：张三、李四', // 日程安排备注
-                start_time: new Date(), // 日程安排开始时间，Date类型
-                end_time: new Date(new Date().getTime() + 3600000), // 日程安排结束时间，Date类型
-                remind_time: new Date(new Date().getTime() - 3600000) // 日程安排提醒时间，Date类型
-            }
-        ]
-    }
-]
-```
+- `mapType`（`string?='tdt'`） - 基础底图类型，`tdt`：天地图，`esri`：esri地图服务
+
+- `mapUrl`（`string[] | string`） - 基础底图路径
+
+- `initExtent`（`Object`） - 初始地图范围，`{xmax, xmin, ymax, ymin}`
 
 ### Outputs
 
-- `dateChange` - 日期改变会触发该事件，参数$event为改变之后的日期
+- `mapReady`：地图初始化完成后会触发该事件，参数$event为当前component实例对象
 
-**以下事件只发送事件有关的参数，具体操作需自定义**
+- `exentChange`：地图范围改变触发该事件，参数$event为当前地图范围对象
 
-- `onAddSchedule` - 触发该事件新增日程安排，参数$event为选中的日期
+### Properties
 
-- `onViewSchedule` - 触发该事件查看日程安排，参数$event为一个对象，属性：date为当前日程安排所在日期, data为选中的日程安排数据
+- `map`（`any`） - 当前地图对象
 
-- `onViewAllSchedule` - 触发该事件查看当日全部日程安排，参数$event为一个对象，属性：date为选中的日期, data为选中日期的所有日程安排数据
+### Methods
 
-- `onDeleteSchedule` - 触发该事件删除日程安排，参数$event为该日程安排数据
+- `loadEsriModules (modules: string[]): Promise<any>` - 加载ArcGIS API for JavaScript的模块，如：`['esri/map']`
 
 ## Develop
 
