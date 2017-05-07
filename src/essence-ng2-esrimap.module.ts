@@ -20,8 +20,8 @@ import {EsriLoaderService} from "angular2-esri-loader";
         EssenceNg2EsriMapComponent
     ],
 	providers: [
-		EssenceNg2EsriMapService,
-		EsriLoaderService
+		EsriLoaderService,
+		EssenceNg2EsriMapService
 	]
 })
 export class EssenceNg2EsriMapModule {

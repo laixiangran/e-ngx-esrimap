@@ -12,7 +12,7 @@ export class EssenceNg2EsriMapService {
         this.esriLoader = esriLoader;
     }
 
-    loadEsriApi(): any {
+    loadEsriApi(): Promise<any> {
     	if (!window['esriMapHasLoad']) {
 			return this.esriLoader.load({url: this.apiUrl})['then'](() => {
 				window['esriMapHasLoad'] = true;
