@@ -13,7 +13,8 @@
 			"tsconfig": "tsconfig.json",
 			"prefix": "",
 			"styles": [
-				"./index.css"
+				"./index.css",
+				"../node_modules/font-awesome/css/font-awesome.min.css"
 			],
 			"scripts": [],
 			"environmentSource": "environments/environment.ts",

@@ -1,6 +1,6 @@
 {
 	"name": "essence-ng2-esrimap",
-	"version": "1.0.7",
+	"version": "1.0.8",
 	"description": "essence-ng2-esrimap is a esrimap component for Angular.",
 	"keywords": [
 		"angular2",
@@ -34,7 +34,8 @@
 	"module": "dist/index.js",
 	"typings": "dist/index.d.ts",
 	"dependencies": {
-		"angular2-esri-loader": "^1.0.0"
+		"angular2-esri-loader": "^1.0.0",
+		"font-awesome": "^4.7.0"
 	},
 	"devDependencies": {
 		"@angular/core": "^4.0.0",

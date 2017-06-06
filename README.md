@@ -9,15 +9,22 @@ essence-ng2-esrimap is a esrimap component for Angular.
 	```shell
 	npm install --save essence-ng2-esrimap@latest
 	```
+
+2. Set in the .angular-cli.json（@angular/cli）
+
+	```json
+    "styles": [
+        "../node_modules/font-awesome/css/font-awesome.min.css"
+    ]
+	```
 	
-2. 在index.html引入font-awesome、esri.css
+3. Import esri.css
 
 	```html
 	<link rel="stylesheet" href="http://js.arcgis.com/3.14/esri/css/esri.css">
-	<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 	```
 
-3. Add the EssenceNg2CalendarModule
+4. Add the EssenceNg2CalendarModule
 
 	```typescript
 	import {EssenceNg2EsriMapModule} from "essence-ng2-esrimap";
@@ -28,7 +35,7 @@ essence-ng2-esrimap is a esrimap component for Angular.
 	})
 	```
 
-4. Use in the template
+5. Use in the template
 
 	```html
 	<essence-ng2-esrimap
@@ -40,7 +47,7 @@ essence-ng2-esrimap is a esrimap component for Angular.
 	</essence-ng2-esrimap>
 	```
 
-5. Use in the component
+6. Use in the component
 
 	```typescript
 	esriMapComponent: EssenceNg2EsriMapComponent;
