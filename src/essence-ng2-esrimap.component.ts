@@ -1,9 +1,10 @@
-import {Component, OnInit, ElementRef, ViewChild, Output, EventEmitter, Input} from '@angular/core';
-import {Observable} from "rxjs/Observable";
-import {Subscriber} from "rxjs/Subscriber";
+import { Component, OnInit, ElementRef, ViewChild, Output, EventEmitter, Input } from '@angular/core';
+import { Observable } from "rxjs/Observable";
+import { Subscriber } from "rxjs/Subscriber";
+import { EsriLoaderService } from "angular2-esri-loader";
 
-import {EssenceNg2EsriMapService} from "./essence-ng2-esrimap.service";
-import {AsyncGetResultParam} from "./models/AsyncGetResultParam";
+import { AsyncGetResultParam } from "./models/AsyncGetResultParam";
+
 
 @Component({
     selector: 'essence-ng2-esrimap',
@@ -43,8 +44,14 @@ export class EssenceNg2EsriMapComponent implements OnInit {
     // 底图路径
     @Input() mapUrl: string[] | string;
 
+    // 几何服务路径
+    @Input() geoUrl: string = 'http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer';
+
+    // arcgis javascript api路径
+    @Input() gisApiUrl: string = 'http://js.arcgis.com/3.14/';
+
     // 底图类型
-    @Input() mapType: string;
+    @Input() mapType: string = 'esri';
 
     // 地图初始范围
     @Input() initExtent: any;
@@ -57,30 +64,20 @@ export class EssenceNg2EsriMapComponent implements OnInit {
     @Output()
     exentChange: EventEmitter<any> = new EventEmitter<any>(false);
 
-    constructor (private esriService: EssenceNg2EsriMapService) {}
+    constructor(private esriLoaderService: EsriLoaderService) {}
 
-    ngOnInit () {
-        if (this.map) {
-            return;
-        }
-
-		this.loadEsriApi().then(() => {
-			this.initMap();
-		});
-    }
-
-    /**
-     * 加载esri api
-     * @returns {any}
-     */
-    private loadEsriApi (): any {
-        return this.esriService.loadEsriApi();
+    ngOnInit() {
+        this.esriLoaderService.load({url: this.gisApiUrl}).then(() => {
+            this.initMap();
+        }).catch((e: any) => {
+            this.initMap();
+        });
     }
 
     /**
      * 初始化地图
      */
-    private initMap (): void {
+    private initMap(): void {
         this.loadEsriModules([
             "esri/map",
             "esri/graphic",
@@ -114,7 +111,8 @@ export class EssenceNg2EsriMapComponent implements OnInit {
                      SimpleLineSymbol,
                      SimpleFillSymbol
                  ]) => {
-            // 模块
+
+            // 初始化模块
             this.Map = Map;
             this.Extent = Extent;
             this.Geoprocessor = Geoprocessor;
@@ -125,11 +123,17 @@ export class EssenceNg2EsriMapComponent implements OnInit {
             this.PictureMarkerSymbol = PictureMarkerSymbol;
             this.Graphic = Graphic;
             this.SpatialReference = SpatialReference;
-            this.geometryService = new GeometryService('http://192.168.0.109:8399/arcgis/rest/services/Geometry/GeometryServer');
             this.FeatureSet = FeatureSet;
             this.SimpleMarkerSymbol = SimpleMarkerSymbol;
             this.SimpleLineSymbol = SimpleLineSymbol;
             this.SimpleFillSymbol = SimpleFillSymbol;
+
+            // 初始化几何服务
+            if (this.geoUrl) {
+                this.geometryService = new GeometryService(this.geoUrl);
+            } else {
+                throw 'geoUrl未配置，将导致坐标转换等功能无法使用！'
+            }
 
             // 初始化地图
             this.map = new Map(this.mapEle.nativeElement, {
@@ -160,8 +164,8 @@ export class EssenceNg2EsriMapComponent implements OnInit {
      * @param modules
      * @returns {Promise<any>}
      */
-    loadEsriModules (modules: string[]): Promise<any> {
-        return this.esriService.loadEsriModules(modules);
+    loadEsriModules(modules: string[]): Promise<any> {
+        return this.esriLoaderService.loadModules(modules);
     }
 
     /**
@@ -169,7 +173,7 @@ export class EssenceNg2EsriMapComponent implements OnInit {
      * @param layers 图层的代码
      * @returns {Promise<T>}
      */
-    private getTdtLayer (layers: string[]): Promise<any> {
+    private getTdtLayer(layers: string[]): Promise<any> {
         return new Promise((resolve) => {
             this.loadEsriModules([
                 "esri/layers/TileInfo",
@@ -226,57 +230,34 @@ export class EssenceNg2EsriMapComponent implements OnInit {
         });
     }
 
-    zoomIn () {
+    zoomIn() {
         this.isMax = this.map.getZoom() >= this.map.getMaxZoom();
         if (!this.isMax) {
             this.map.setZoom(this.map.getZoom() + 1);
         }
     }
 
-    zoomOut () {
+    zoomOut() {
         this.isMin = this.map.getZoom() <= this.map.getMinZoom();
         if (!this.isMin) {
             this.map.setZoom(this.map.getZoom() - 1);
         }
     }
 
-    private requestFullScreen (element: HTMLElement) {
-        let requestMethod = element.requestFullscreen || //W3C
-            element.webkitRequestFullScreen;    //Chrome等
-
-        if (requestMethod) {
-            requestMethod.call(element);
-        } else {
-            console.error('当前浏览器不支持全屏！');
-        }
-    }
-
-    /**
-     * 退出全屏
-     */
-    private exitFullScreen () {
-        let exitMethod = document.exitFullscreen || //W3C
-            document.webkitExitFullscreen;    //Chrome等
-
-        if (exitMethod) {
-            exitMethod.call(document);
-        } else {
-            console.error('当前浏览器不支持退出全屏！');
-        }
-    }
-
-    fullMap () {
+    fullMap() {
         this.map.setExtent(new this.Extent(this.initExtent));
     }
 
     /**
      * 地图注册事件
      */
-    addMapEvent () {
+    private addMapEvent() {
         this.map.on("load", () => {
             if (this.initExtent) {
                 this.initExtent.spatialReference = this.map.spatialReference;
                 this.map.setExtent(new this.Extent(this.initExtent));
+            } else {
+                this.initExtent = this.map.extent;
             }
             this.mapReady.emit(this);
         });
@@ -292,7 +273,7 @@ export class EssenceNg2EsriMapComponent implements OnInit {
      * GP服务获取数据（异步）
      * @param params
      */
-    gpAsyncGetResultData (params: AsyncGetResultParam) {
+    gpAsyncGetResultData(params: AsyncGetResultParam): void {
         let gp = new this.Geoprocessor(params.url);
         gp.submitJob(params.inParamVal, (jobInfo: any) => {
             gp.getResultData(jobInfo.jobId, params.outParamName, (result: any) => {
@@ -311,11 +292,11 @@ export class EssenceNg2EsriMapComponent implements OnInit {
      * 点定位
      * @param point
      */
-    locationPoint (point: any) {
+    locationPoint(point: { x: number, y: number }): void {
         this.locationLayer || (this.locationLayer = new this.GraphicsLayer());
         let mp = new this.Point({
-                x: point.x || point.X,
-                y: point.y || point.Y,
+                x: point.x,
+                y: point.y,
                 spatialReference: this.map.spatialReference
             }),
             mpSymbol = new this.PictureMarkerSymbol({
@@ -350,7 +331,7 @@ export class EssenceNg2EsriMapComponent implements OnInit {
      * width {Number} 信息窗口宽度
      * height {Number} 信息窗口高度
      */
-    showMapInfoWindow (params: any) {
+    showMapInfoWindow(params: any): void {
         this.map.infoWindow.setTitle(params.title);
         this.map.infoWindow.setContent(params.content);
         this.map.infoWindow.resize(params.width || 200, params.height || 300);
@@ -360,17 +341,17 @@ export class EssenceNg2EsriMapComponent implements OnInit {
     /**
      * 隐藏地图信息窗口
      */
-    hideMapInfoWindow () {
+    hideMapInfoWindow(): void {
         this.map.infoWindow.hide();
     }
 
     /**
-     *
+     * 要素坐标转换
      * @param fs 转换的要素集
      * @param wkid 转换的坐标编码
      * @returns {Observable<any>}
      */
-    exactProject (fs: any, wkid: any): Observable<any> {
+    exactProject(fs: any, wkid: any): Observable<any> {
         return new Observable<any>((subscriber: Subscriber<any>) => {
             let geometries = [],
                 attrs = [],
@@ -419,7 +400,7 @@ export class EssenceNg2EsriMapComponent implements OnInit {
      * @param dfm 度分秒表示-180°0′0″
      * @returns {number} 十进制
      */
-    latToDec (dfm: string): number {
+    latToDec(dfm: string): number {
         let lod = Number(dfm.split("°")[0]),
             lom = Number(dfm.split("°")[1].split("′")[0]),
             los = Number(dfm.split("°")[1].split("′")[1].split("″")[0]);
@@ -432,7 +413,7 @@ export class EssenceNg2EsriMapComponent implements OnInit {
      * @param sjz 十进制表示-180.00
      * @returns {string} 度分秒表示-180°0′0″
      */
-    decToLat (sjz: number): string {
+    decToLat(sjz: number): string {
         let d = String(sjz).split("."),
             f = String(Number("0." + d[1]) * 60).split(".");
 

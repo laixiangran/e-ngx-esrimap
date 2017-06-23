@@ -18,13 +18,13 @@ essence-ng2-esrimap is a esrimap component for Angular.
     ]
 	```
 	
-3. Import esri.css
+3. Import esri.css（项目中应改成自己的路径）
 
 	```html
 	<link rel="stylesheet" href="http://js.arcgis.com/3.14/esri/css/esri.css">
 	```
 
-4. Add the EssenceNg2CalendarModule
+4. Add the EssenceNg2EsriMapModule
 
 	```typescript
 	import {EssenceNg2EsriMapModule} from "essence-ng2-esrimap";
@@ -38,37 +38,32 @@ essence-ng2-esrimap is a esrimap component for Angular.
 5. Use in the template
 
 	```html
-	<essence-ng2-esrimap
-		(mapReady)="onMapReady($event)"
-		(exentChange)="onExentChange($event)"
-		[mapType]="'tdt'"
-		[mapUrl]="['vec_c', 'cva_c']"
-		[initExtent]="initExtent">
-	</essence-ng2-esrimap>
+    <essence-ng2-esrimap
+            [gisApiUrl]="gisApiUrl"
+            [geoUrl]="geoUrl"
+            [mapUrl]="mapUrl"
+            (mapReady)="onMapReady($event)"
+            (exentChange)="onExentChange($event)">
+    </essence-ng2-esrimap>
 	```
 
 6. Use in the component
 
 	```typescript
-	esriMapComponent: EssenceNg2EsriMapComponent;
+    esriMap: EssenceNg2EsriMapComponent;
+    mapUrl: string = 'http://192.168.0.109:8399/arcgis/rest/services/HD_BASEMAP/MapServer';
+    geoUrl: string = 'http://192.168.0.109:8399/arcgis/rest/services/Geometry/GeometryServer';
+    gisApiUrl: string = 'http://192.168.0.109/arcgis_api/3.14/init.js';
 
-    initExtent: any = {
-        xmax: 116.75667048654691,
-        xmin: 115.97389460764066,
-        ymax: 40.12732707113387,
-        ymin: 39.71533976644637
-    };
-
-    onMapReady ($event: EssenceNg2EsriMapComponent) {
-        this.esriMapComponent = $event;
-        this.esriMapComponent.loadEsriModules(["esri/symbols/SimpleMarkerSymbol"])
-            .then(([SimpleMarkerSymbol]) => {
-            
-                this.SimpleMarkerSymbol = SimpleMarkerSymbol;
-        });
+    onMapReady($event: EssenceNg2EsriMapComponent) {
+        this.esriMap = $event;
     }
-    
-    onExentChange (event: any) {
+
+    /**
+     * 地图范围改变的事件
+     * @param $event
+     */
+    onExentChange(event: any) {
         console.log(event);
     }
 	```
@@ -77,9 +72,13 @@ essence-ng2-esrimap is a esrimap component for Angular.
 
 ### Inputs
 
-- `mapType`（`string?='tdt'`） - 基础底图类型，`tdt`：天地图，`esri`：esri地图服务
-
 - `mapUrl`（`string[] | string`） - 基础底图路径
+
+- `mapType`（`string?='esri'`） - 基础底图类型，`tdt`：天地图，`esri`：esri地图服务
+
+- `geoUrl`（`string?='http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer'`） - 几何服务路径，默认是在线路径，最好配置自己的路径
+
+- `gisApiUrl`（`string?='http://js.arcgis.com/3.14/'`） - arcgis javascript api路径，默认是在线路径，最好配置自己的路径
 
 - `initExtent`（`Object`） - 初始地图范围，`{xmax, xmin, ymax, ymin}`
 
@@ -93,9 +92,30 @@ essence-ng2-esrimap is a esrimap component for Angular.
 
 - `map`（`any`） - 当前地图对象
 
-### Methods
+### Instance Methods
 
-- `loadEsriModules (modules: string[]): Promise<any>` - 加载ArcGIS API for JavaScript的模块，如：`['esri/map']`
+- `loadEsriModules(modules: string[]): Promise<any>` - 加载ArcGIS API for JavaScript的模块，如：`['esri/map']`
+
+- `gpAsyncGetResultData(params: AsyncGetResultParam): void` - GP服务获取数据（异步）
+
+- `locationPoint(point: {x: number, y: number}): void` - 点定位
+
+- `showMapInfoWindow(params: any): void` - 显示地图信息窗口
+         * params属性如下：
+         * title {String} 信息窗口标题
+         * content {String} 信息窗口内容，支持html
+         * location {Point} 信息窗口位置
+         * placement {String} 信息窗口方位
+         * width {Number} 信息窗口宽度
+         * height {Number} 信息窗口高度
+
+- `hideMapInfoWindow(): void` - 隐藏地图信息窗口
+
+- `exactProject(fs: any, wkid: any): Observable<any>` - 要素坐标转换
+
+- `latToDec(dfm: string): number` - 将坐标由度分秒表示转为十进制表示
+
+- `decToLat(sjz: number): string` - 将坐标由十进制表示转为度分秒表示
 
 ## Develop
 

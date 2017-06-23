@@ -1,9 +1,7 @@
-# 1.0.8 (2017-06-06)
+# 1.0.9 (2017-06-23)
 
-## Bug Fixes
+重构 优化代码
 
-## Code Refactoring
+# 1.0.0 - 1.0.8 (2017-06-06)
 
-## Features
-
-## BREAKING CHANGES
+发布初始版本
