@@ -41,6 +41,9 @@ export class EssenceNg2EsriMapComponent implements OnInit {
     isMax: boolean = false; // 比例是否最大
     isMin: boolean = false; // 比例是否最小
 
+    // 是否开启代理
+    @Input() isProxy: boolean = true;
+
     // 底图路径
     @Input() mapUrl: string[] | string;
 
@@ -140,12 +143,14 @@ export class EssenceNg2EsriMapComponent implements OnInit {
             }
 
             // 设置代理
-            esriConfig.defaults.io.proxyUrl = 'proxy.jsp';
-            esriConfig.defaults.io.alwaysUseProxy = true;
-            urlUtils.addProxyRule({
-                urlPrefix: "route.arcgis.com",
-                proxyUrl: 'proxy.jsp'
-            });
+            if (this.isProxy) {
+                esriConfig.defaults.io.proxyUrl = 'proxy.jsp';
+                esriConfig.defaults.io.alwaysUseProxy = true;
+                urlUtils.addProxyRule({
+                    urlPrefix: "route.arcgis.com",
+                    proxyUrl: 'proxy.jsp'
+                });
+            }
 
             // 初始化地图
             this.map = new Map(this.mapEle.nativeElement, {

@@ -76,6 +76,8 @@ essence-ng2-esrimap is a esrimap component for Angular.
 
 ### Inputs
 
+- `isProxy`（`boolean?=true`） - 是否开启代理
+
 - `mapUrl`（`string[] | string`） - 基础底图路径
 
 - `mapType`（`string?='esri'`） - 基础底图类型，`tdt`：天地图，`esri`：esri地图服务
