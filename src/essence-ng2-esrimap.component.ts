@@ -80,6 +80,8 @@ export class EssenceNg2EsriMapComponent implements OnInit {
     private initMap(): void {
         this.loadEsriModules([
             "esri/map",
+            "esri/urlUtils",
+            "esri/config",
             "esri/graphic",
             "esri/SpatialReference",
             "esri/tasks/Geoprocessor",
@@ -96,6 +98,8 @@ export class EssenceNg2EsriMapComponent implements OnInit {
             "esri/symbols/SimpleFillSymbol"
         ]).then(([
                      Map,
+                     urlUtils,
+                     esriConfig,
                      Graphic,
                      SpatialReference,
                      Geoprocessor,
@@ -134,6 +138,14 @@ export class EssenceNg2EsriMapComponent implements OnInit {
             } else {
                 throw 'geoUrl未配置，将导致坐标转换等功能无法使用！'
             }
+
+            // 设置代理
+            esriConfig.defaults.io.proxyUrl = 'proxy.jsp';
+            esriConfig.defaults.io.alwaysUseProxy = true;
+            urlUtils.addProxyRule({
+                urlPrefix: "route.arcgis.com",
+                proxyUrl: 'proxy.jsp'
+            });
 
             // 初始化地图
             this.map = new Map(this.mapEle.nativeElement, {

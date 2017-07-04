@@ -68,6 +68,10 @@ essence-ng2-esrimap is a esrimap component for Angular.
     }
 	```
 
+### 注意
+
+如果出现跨域的问题，请检查项目根目录下是否存在`proxy.config`及`proxy.jsp`，没有请放置。
+
 ## API
 
 ### Inputs
