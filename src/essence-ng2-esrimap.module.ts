@@ -3,10 +3,10 @@
  * homepage：http://www.laixiangran.cn.
  */
 
-import {NgModule} from '@angular/core';
-import {CommonModule} from "@angular/common";
-import {EssenceNg2EsriMapComponent} from "./essence-ng2-esrimap.component";
-import {EsriLoaderService} from "angular2-esri-loader";
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { EssenceNg2EsriMapComponent } from './essence-ng2-esrimap.component';
+import { EsriLoaderService } from 'angular2-esri-loader';
 
 @NgModule({
     imports: [
@@ -18,9 +18,9 @@ import {EsriLoaderService} from "angular2-esri-loader";
     exports: [
         EssenceNg2EsriMapComponent
     ],
-	providers: [
-		EsriLoaderService
-	]
+    providers: [
+        EsriLoaderService
+    ]
 })
 export class EssenceNg2EsriMapModule {
 }
