@@ -42,7 +42,7 @@ export class EssenceNg2EsriMapComponent implements OnInit {
     isMin: boolean = false; // 比例是否最小
 
     // 是否开启代理
-    @Input() isProxy: boolean = true;
+    @Input() isProxy: boolean = false;
 
     // 底图路径
     @Input() mapUrl: string[] | string;
