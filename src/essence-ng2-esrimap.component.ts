@@ -234,7 +234,7 @@ export class EssenceNg2EsriMapComponent implements OnInit {
                     let subDomains: string[] = ["t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7"];
                     let tdtLayers: any[] = [];
                     layers.forEach((type) => {
-                        let templateUrl: string = 'http://${subDomain}.tianditu.com/DataServer?T=' + type + '&X=${col}&Y=${row}&L=${level}';
+                        let templateUrl: string = 'http://${subDomain}.tianditu.com/DataServer?T=' + type + '_c&X=${col}&Y=${row}&L=${level}';
                         let tdtLayer: any = new WebTiledLayer(templateUrl, {
                             id: "tdt_" + type,
                             subDomains: subDomains,

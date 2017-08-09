@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
-import { EssenceNg2EsriMapComponent } from "../../src/essence-ng2-esrimap.component";
+import { EssenceNg2EsriMapComponent } from '../../src/essence-ng2-esrimap.component';
+import { Observable } from "rxjs/Observable";
+import { Http, Response, Headers, RequestOptions } from "@angular/http";
+import "rxjs/add/operator/catch";
+import "rxjs/add/operator/map";
 
 @Component({
     selector: 'app-root',
@@ -8,11 +12,20 @@ import { EssenceNg2EsriMapComponent } from "../../src/essence-ng2-esrimap.compon
 })
 export class AppComponent {
     esriMap: EssenceNg2EsriMapComponent;
-    mapUrl: string = 'http://192.168.0.109:8399/arcgis/rest/services/HD_BASEMAP/MapServer';
+    ClusterLayer: any;
+    mapUrl: string[] = ['vec', 'cva'];
+    mapType: string = 'tdt';
     geoUrl: string = 'http://192.168.0.109:8399/arcgis/rest/services/Geometry/GeometryServer';
-    gisApiUrl: string = 'http://192.168.0.109/arcgis_api/3.14/init.js';
+    gisApiUrl: string = 'http://192.168.0.8/arcgis_api/3.14/init.js';
+    initExtent: any = {
+        "xmax": 106.309310,
+        "xmin": 106.209370,
+        "ymax": 39.099857,
+        "ymin": 37.523521
+    };
+    clusterLayer: any;
 
-    constructor() {
+    constructor(public http: Http) {
     }
 
     ngOnInit() {
@@ -20,6 +33,60 @@ export class AppComponent {
 
     onMapReady($event: EssenceNg2EsriMapComponent) {
         this.esriMap = $event;
+        this.esriMap.loadEsriModules(['extras/ClusterLayer', 'esri/renderers/ClassBreaksRenderer']).then(([ClusterLayer, ClassBreaksRenderer]) => {
+            this.ClusterLayer = ClusterLayer;
+            this.post('http://192.168.0.61/nxhh/ShareAction/getBdListPage', {
+                currentPage: 1,
+                pageSize: 10000
+            }).subscribe((serverData) => {
+                const items: any[] = serverData.result.items;
+                let datas: any[] = [];
+                items.forEach((d) => {
+                    if (d.x && d.y) {
+                        datas.push({
+                            x: d.x,
+                            y: d.y,
+                            attributes: d
+                        });
+                    }
+                });
+                this.clusterLayer = new this.ClusterLayer({
+                    'data': datas,
+                    'distance': 100,
+                    'id': 'clusters',
+                    'showSingles': false,
+                    'labelColor': '#fff',
+                    'labelOffset': 10,
+                    'resolution': this.esriMap.map.extent.getWidth() / this.esriMap.map.width,
+                    'spatialReference': this.esriMap.map.spatialReference
+                });
+                let defaultSym = new this.esriMap.SimpleMarkerSymbol().setSize(4);
+                let renderer = new ClassBreaksRenderer(defaultSym, "clusterCount");
+                let picBaseUrl = "http://static.arcgis.com/images/Symbols/Shapes/";
+                var blue = new this.esriMap.PictureMarkerSymbol(picBaseUrl + "BluePin1LargeB.png", 36, 36).setOffset(0, 15);
+                let green = new this.esriMap.PictureMarkerSymbol(picBaseUrl + "GreenPin1LargeB.png", 48, 48).setOffset(0, 15);
+                this.clusterLayer.setRenderer(renderer);
+                renderer.addBreak(0, 1, blue);
+                renderer.addBreak(2, 99999999, green);
+                this.esriMap.map.addLayer(this.clusterLayer);
+                let initMapExtent: any = {};
+                this.clusterLayer.on('click', (evt: any) => {
+                    const extent: any = evt.graphic.attributes.extent,
+                        clusters: any = evt.graphic.attributes.clusters,
+                        mapExtent: any = new this.esriMap.Extent(extent[0], extent[1], extent[2], extent[3], this.esriMap.map.spatialReference);
+                    if (clusters.length > 1) {
+                        initMapExtent = JSON.parse(JSON.stringify(this.esriMap.map.extent));
+                        this.esriMap.map.setExtent(mapExtent, true).then(() => {
+                            if (initMapExtent.xmax === this.esriMap.map.extent.xmax) {
+                                console.log(clusters);
+                            }
+                        });
+                    } else {
+                        console.log(clusters[0].attributes);
+                    }
+                });
+            });
+        });
     }
 
     /**
@@ -27,6 +94,25 @@ export class AppComponent {
      * @param $event
      */
     onExentChange(event: any) {
-        console.log(event);
+        // console.log(event);
+    }
+
+    /**
+     * post请求
+     * @param {string} url 请求路径
+     * @param {*} body body
+     * @returns {Observable<any>}
+     */
+    post(url: string, body: any): Observable<any> {
+        const headers = new Headers({
+            'Content-Type': 'application/json',
+            'URMS_LOGIN_TOKEN': 'E4093EDF0EAD188D_529295B0B2CEB10ABAC26C188682A4683D9EB32711D63A10EA4EF06C558FACD200CF493097DD30FA'
+        });
+        const options = new RequestOptions({headers: headers});
+        return this.http.post(url, body && JSON.stringify(body), options).map((res: Response) => {
+            return res.json();
+        }).catch((error: Response): Observable<any> => {
+            return Observable.throw(error.json() || 'Server Error');
+        });
     }
 }
