@@ -342,7 +342,9 @@ export class EssenceNg2EsriMapComponent implements OnInit {
      * 清除定位图层
      */
     clearLocationLayer() {
-        this.locationLayer.clear();
+        if (this.locationLayer) {
+            this.locationLayer.clear();
+        }
     }
 
     /**
