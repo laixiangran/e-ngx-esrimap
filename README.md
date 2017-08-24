@@ -106,6 +106,8 @@ essence-ng2-esrimap is a esrimap component for Angular.
 
 - `locationPoint(point: {x: number, y: number}): void` - 点定位
 
+- `clearLocationLayer(): void` - 清除定位图层
+
 - `showMapInfoWindow(params: any): void` - 显示地图信息窗口
          * params属性如下：
          * title {String} 信息窗口标题

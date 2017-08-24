@@ -339,6 +339,13 @@ export class EssenceNg2EsriMapComponent implements OnInit {
     }
 
     /**
+     * 清除定位图层
+     */
+    clearLocationLayer() {
+        this.locationLayer.clear();
+    }
+
+    /**
      * 显示地图信息窗口
      * @param params 信息窗口参数，属性如下：
      * title {String} 信息窗口标题
