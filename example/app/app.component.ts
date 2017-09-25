@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
 	mapType: string = 'tdt';
 	geoUrl: string = environment.geoUrl; // 几何服务路径
 	gisApiUrl: string = environment.gisApiUrl; // arcgis javascript API路径
-	esriCSSUrl: string = environment.esriCSSUrl; // esri.css路径
+	esriCSSUrl: string = environment.esriCSSUrl; // arcgis javascript API路径
 
 	constructor() {
 	}

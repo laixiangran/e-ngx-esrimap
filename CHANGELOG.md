@@ -2,6 +2,8 @@
 
 新增 输入属性esriCSSUrl，用于动态加载esri.css
 
+修复 IE10的bug
+
 # 1.1.2 (2017-08-24)
 
 新增 清除定位图层的方法（clearLocationLayer）

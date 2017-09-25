@@ -31,7 +31,6 @@
   "module": "dist/index.js",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "angular-esri-loader": "^1.1.0",
     "font-awesome": "^4.7.0"
   },
   "devDependencies": {

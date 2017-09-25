@@ -1,10 +1,9 @@
 import { Component, OnInit, ElementRef, ViewChild, Output, EventEmitter, Input, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscriber } from 'rxjs/Subscriber';
-import { EsriLoaderService } from 'angular-esri-loader';
 
 import { AsyncGetResultParam } from './models/AsyncGetResultParam';
-
+import { EssenceEsriLoaderService } from './essence-esri-loader.service';
 
 @Component({
 	selector: 'essence-ng2-esrimap',
@@ -69,14 +68,18 @@ export class EssenceNg2EsriMapComponent implements OnInit, OnDestroy {
 	@Output()
 	exentChange: EventEmitter<any> = new EventEmitter<any>(false);
 
-	constructor(private esriLoaderService: EsriLoaderService) {}
+	constructor(private esriLoaderService: EssenceEsriLoaderService) {}
 
 	ngOnInit() {
 		this.addEsriMapCss();
 		this.esriLoaderService.load({url: this.gisApiUrl}).then(() => {
 			this.initMap();
-		}).catch((e: any) => {
-			this.initMap();
+		}).catch((e: Error) => {
+			if (e.message === 'The ArcGIS API for JavaScript is already loaded.') {
+				this.initMap();
+			} else {
+				console.error(e);
+			}
 		});
 	}
 
