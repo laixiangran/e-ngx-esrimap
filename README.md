@@ -36,6 +36,7 @@ essence-ng2-esrimap is a esrimap component for Angular.
             [gisApiUrl]="gisApiUrl"
             [geoUrl]="geoUrl"
             [mapUrl]="mapUrl"
+            [esriCSSUrl]="esriCSSUrl"
             (mapReady)="onMapReady($event)"
             (exentChange)="onExentChange($event)">
     </essence-ng2-esrimap>
@@ -48,15 +49,12 @@ essence-ng2-esrimap is a esrimap component for Angular.
     mapUrl: string = 'http://192.168.0.109:8399/arcgis/rest/services/HD_BASEMAP/MapServer';
     geoUrl: string = 'http://192.168.0.109:8399/arcgis/rest/services/Geometry/GeometryServer';
     gisApiUrl: string = 'http://192.168.0.109/arcgis_api/3.14/init.js';
+    esriCSSUrl: string = 'http://192.168.0.8/arcgis_api/3.14/esri/css/esri.css'; // esri.css路径
 
     onMapReady($event: EssenceNg2EsriMapComponent) {
         this.esriMap = $event;
     }
 
-    /**
-     * 地图范围改变的事件
-     * @param $event
-     */
     onExentChange(event: any) {
         console.log(event);
     }
