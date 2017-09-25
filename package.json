@@ -1,10 +1,10 @@
 {
   "name": "essence-ng2-esrimap",
-  "version": "1.1.2",
-  "description": "essence-ng2-esrimap is a esrimap component for Angular.",
+  "version": "1.1.3",
+  "description": "essence-ng2-esrimap is a component for Angular to work with ArcGIS API for JavaScript v3.14.",
   "keywords": [
-    "angular2",
-    "esri",
+    "angular",
+    "ArcGIS API for JavaScript",
     "laixiangran"
   ],
   "homepage": "https://github.com/laixiangran/essence-ng2-esrimap#readme",

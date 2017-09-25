@@ -17,14 +17,8 @@ essence-ng2-esrimap is a esrimap component for Angular.
         "../node_modules/font-awesome/css/font-awesome.min.css"
     ]
 	```
-	
-3. Import esri.css（项目中应改成自己的路径）
 
-	```html
-	<link rel="stylesheet" href="http://js.arcgis.com/3.14/esri/css/esri.css">
-	```
-
-4. Add the EssenceNg2EsriMapModule
+3. Add the EssenceNg2EsriMapModule
 
 	```typescript
 	import {EssenceNg2EsriMapModule} from "essence-ng2-esrimap";
@@ -35,7 +29,7 @@ essence-ng2-esrimap is a esrimap component for Angular.
 	})
 	```
 
-5. Use in the template
+4. Use in the template
 
 	```html
     <essence-ng2-esrimap
@@ -47,7 +41,7 @@ essence-ng2-esrimap is a esrimap component for Angular.
     </essence-ng2-esrimap>
 	```
 
-6. Use in the component
+5. Use in the component
 
 	```typescript
     esriMap: EssenceNg2EsriMapComponent;
@@ -84,7 +78,9 @@ essence-ng2-esrimap is a esrimap component for Angular.
 
 - `geoUrl`（`string?='http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer'`） - 几何服务路径，默认是在线路径，最好配置自己的路径
 
-- `gisApiUrl`（`string?='http://js.arcgis.com/3.14/'`） - arcgis javascript api路径，默认是在线路径，最好配置自己的路径
+- `geoUrl`（`string?='http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer'`） - 几何服务路径，默认是在线路径，最好配置自己的路径
+
+- `esriCSSUrl`（`string?='http://js.arcgis.com/3.14/esri/css/esri.css'`） - esri.css路径，默认是在线路径，最好配置自己的路径
 
 - `initExtent`（`Object`） - 初始地图范围，`{xmax, xmin, ymax, ymin}`
 
