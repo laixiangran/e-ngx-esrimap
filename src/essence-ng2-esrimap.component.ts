@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Output, EventEmitter, Input, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscriber } from 'rxjs/Subscriber';
 import { EsriLoaderService } from 'angular-esri-loader';
@@ -11,7 +11,7 @@ import { AsyncGetResultParam } from './models/AsyncGetResultParam';
 	templateUrl: './essence-ng2-esrimap.component.html',
 	styleUrls: ['./essence-ng2-esrimap.component.scss']
 })
-export class EssenceNg2EsriMapComponent implements OnInit {
+export class EssenceNg2EsriMapComponent implements OnInit, OnDestroy {
 
 	// esri modules
 	Map: any;
@@ -33,13 +33,12 @@ export class EssenceNg2EsriMapComponent implements OnInit {
 
 	// map
 	map: any;
-
-	@ViewChild('map') mapEle: ElementRef;
-
 	private timeOutId: number;
 	private locationLayer: any; // 定位图层
 	isMax: boolean = false; // 比例是否最大
 	isMin: boolean = false; // 比例是否最小
+
+	@ViewChild('map') mapEle: ElementRef;
 
 	// 是否开启代理
 	@Input() isProxy: boolean = false;
@@ -79,6 +78,9 @@ export class EssenceNg2EsriMapComponent implements OnInit {
 		}).catch((e: any) => {
 			this.initMap();
 		});
+	}
+
+	ngOnDestroy() {
 	}
 
 	/**
