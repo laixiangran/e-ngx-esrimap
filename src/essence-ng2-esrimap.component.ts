@@ -54,7 +54,7 @@ export class EssenceNg2EsriMapComponent implements OnInit {
 	@Input() gisApiUrl: string = 'http://js.arcgis.com/3.14/';
 
 	// esri.css路径
-	@Input() esriCssUrl: string = 'http://js.arcgis.com/3.14/esri/css/esri.css';
+	@Input() esriCSSUrl: string = 'http://js.arcgis.com/3.14/esri/css/esri.css';
 
 	// 底图类型
 	@Input() mapType: string = 'esri';
@@ -462,7 +462,7 @@ export class EssenceNg2EsriMapComponent implements OnInit {
 				link = document.createElement('link');
 			link.id = linkId;
 			link.rel = 'stylesheet';
-			link.href = this.esriCssUrl;
+			link.href = this.esriCSSUrl;
 			head.appendChild(link);
 		}
 	}
