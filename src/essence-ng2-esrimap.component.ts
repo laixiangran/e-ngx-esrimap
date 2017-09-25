@@ -1,448 +1,469 @@
 import { Component, OnInit, ElementRef, ViewChild, Output, EventEmitter, Input } from '@angular/core';
-import { Observable } from "rxjs/Observable";
-import { Subscriber } from "rxjs/Subscriber";
-import { EsriLoaderService } from "angular2-esri-loader";
+import { Observable } from 'rxjs/Observable';
+import { Subscriber } from 'rxjs/Subscriber';
+import { EsriLoaderService } from 'angular-esri-loader';
 
-import { AsyncGetResultParam } from "./models/AsyncGetResultParam";
+import { AsyncGetResultParam } from './models/AsyncGetResultParam';
 
 
 @Component({
-    selector: 'essence-ng2-esrimap',
-    templateUrl: './essence-ng2-esrimap.component.html',
-    styleUrls: ['./essence-ng2-esrimap.component.scss']
+	selector: 'essence-ng2-esrimap',
+	templateUrl: './essence-ng2-esrimap.component.html',
+	styleUrls: ['./essence-ng2-esrimap.component.scss']
 })
 export class EssenceNg2EsriMapComponent implements OnInit {
 
-    // esri modules
-    Map: any;
-    Extent: any;
-    TileInfo: any;
-    Geoprocessor: any;
-    ArcGISTiledMapServiceLayer: any;
-    GraphicsLayer: any;
-    Point: any;
-    PictureMarkerSymbol: any;
-    Graphic: any;
-    ProjectParameters: any;
-    SpatialReference: any;
-    geometryService: any;
-    FeatureSet: any;
-    SimpleMarkerSymbol: any;
-    SimpleLineSymbol: any;
-    SimpleFillSymbol: any;
+	// esri modules
+	Map: any;
+	Extent: any;
+	TileInfo: any;
+	Geoprocessor: any;
+	ArcGISTiledMapServiceLayer: any;
+	GraphicsLayer: any;
+	Point: any;
+	PictureMarkerSymbol: any;
+	Graphic: any;
+	ProjectParameters: any;
+	SpatialReference: any;
+	geometryService: any;
+	FeatureSet: any;
+	SimpleMarkerSymbol: any;
+	SimpleLineSymbol: any;
+	SimpleFillSymbol: any;
 
-    // map
-    map: any;
+	// map
+	map: any;
 
-    @ViewChild('map') mapEle: ElementRef;
+	@ViewChild('map') mapEle: ElementRef;
 
-    private timeOutId: number;
-    private locationLayer: any; // 定位图层
-    isMax: boolean = false; // 比例是否最大
-    isMin: boolean = false; // 比例是否最小
+	private timeOutId: number;
+	private locationLayer: any; // 定位图层
+	isMax: boolean = false; // 比例是否最大
+	isMin: boolean = false; // 比例是否最小
 
-    // 是否开启代理
-    @Input() isProxy: boolean = false;
+	// 是否开启代理
+	@Input() isProxy: boolean = false;
 
-    // 底图路径
-    @Input() mapUrl: string[] | string;
+	// 底图路径
+	@Input() mapUrl: string[] | string;
 
-    // 几何服务路径
-    @Input() geoUrl: string = 'http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer';
+	// 几何服务路径
+	@Input() geoUrl: string = 'http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer';
 
-    // arcgis javascript api路径
-    @Input() gisApiUrl: string = 'http://js.arcgis.com/3.14/';
+	// arcgis javascript api路径
+	@Input() gisApiUrl: string = 'http://js.arcgis.com/3.14/';
 
-    // 底图类型
-    @Input() mapType: string = 'esri';
+	// esri.css路径
+	@Input() esriCssUrl: string = 'http://js.arcgis.com/3.14/esri/css/esri.css';
 
-    // 地图初始范围
-    @Input() initExtent: any;
+	// 底图类型
+	@Input() mapType: string = 'esri';
 
-    // 地图初始化完成之后触发该事件
-    @Output()
-    mapReady: EventEmitter<any> = new EventEmitter<any>(false);
+	// 地图初始范围
+	@Input() initExtent: any;
 
-    // 地图范围改变触发该事件
-    @Output()
-    exentChange: EventEmitter<any> = new EventEmitter<any>(false);
+	// 地图初始化完成之后触发该事件
+	@Output()
+	mapReady: EventEmitter<any> = new EventEmitter<any>(false);
 
-    constructor(private esriLoaderService: EsriLoaderService) {}
+	// 地图范围改变触发该事件
+	@Output()
+	exentChange: EventEmitter<any> = new EventEmitter<any>(false);
 
-    ngOnInit() {
-        this.esriLoaderService.load({url: this.gisApiUrl}).then(() => {
-            this.initMap();
-        }).catch((e: any) => {
-            this.initMap();
-        });
-    }
+	constructor(private esriLoaderService: EsriLoaderService) {}
 
-    /**
-     * 初始化地图
-     */
-    private initMap(): void {
-        this.loadEsriModules([
-            "esri/map",
-            "esri/urlUtils",
-            "esri/config",
-            "esri/graphic",
-            "esri/SpatialReference",
-            "esri/tasks/Geoprocessor",
-            "esri/tasks/ProjectParameters",
-            "esri/tasks/GeometryService",
-            "esri/tasks/FeatureSet",
-            "esri/layers/ArcGISTiledMapServiceLayer",
-            "esri/layers/GraphicsLayer",
-            "esri/geometry/Point",
-            "esri/geometry/Extent",
-            "esri/symbols/PictureMarkerSymbol",
-            "esri/symbols/SimpleMarkerSymbol",
-            "esri/symbols/SimpleLineSymbol",
-            "esri/symbols/SimpleFillSymbol"
-        ]).then(([
-                     Map,
-                     urlUtils,
-                     esriConfig,
-                     Graphic,
-                     SpatialReference,
-                     Geoprocessor,
-                     ProjectParameters,
-                     GeometryService,
-                     FeatureSet,
-                     ArcGISTiledMapServiceLayer,
-                     GraphicsLayer,
-                     Point,
-                     Extent,
-                     PictureMarkerSymbol,
-                     SimpleMarkerSymbol,
-                     SimpleLineSymbol,
-                     SimpleFillSymbol
-                 ]) => {
+	ngOnInit() {
+		this.addEsriMapCss();
+		this.esriLoaderService.load({url: this.gisApiUrl}).then(() => {
+			this.initMap();
+		}).catch((e: any) => {
+			this.initMap();
+		});
+	}
 
-            // 初始化模块
-            this.Map = Map;
-            this.Extent = Extent;
-            this.Geoprocessor = Geoprocessor;
-            this.ProjectParameters = ProjectParameters;
-            this.ArcGISTiledMapServiceLayer = ArcGISTiledMapServiceLayer;
-            this.GraphicsLayer = GraphicsLayer;
-            this.Point = Point;
-            this.PictureMarkerSymbol = PictureMarkerSymbol;
-            this.Graphic = Graphic;
-            this.SpatialReference = SpatialReference;
-            this.FeatureSet = FeatureSet;
-            this.SimpleMarkerSymbol = SimpleMarkerSymbol;
-            this.SimpleLineSymbol = SimpleLineSymbol;
-            this.SimpleFillSymbol = SimpleFillSymbol;
+	/**
+	 * 初始化地图
+	 */
+	private initMap(): void {
+		this.loadEsriModules([
+			'esri/map',
+			'esri/urlUtils',
+			'esri/config',
+			'esri/graphic',
+			'esri/SpatialReference',
+			'esri/tasks/Geoprocessor',
+			'esri/tasks/ProjectParameters',
+			'esri/tasks/GeometryService',
+			'esri/tasks/FeatureSet',
+			'esri/layers/ArcGISTiledMapServiceLayer',
+			'esri/layers/GraphicsLayer',
+			'esri/geometry/Point',
+			'esri/geometry/Extent',
+			'esri/symbols/PictureMarkerSymbol',
+			'esri/symbols/SimpleMarkerSymbol',
+			'esri/symbols/SimpleLineSymbol',
+			'esri/symbols/SimpleFillSymbol'
+		]).then(([
+			Map,
+			urlUtils,
+			esriConfig,
+			Graphic,
+			SpatialReference,
+			Geoprocessor,
+			ProjectParameters,
+			GeometryService,
+			FeatureSet,
+			ArcGISTiledMapServiceLayer,
+			GraphicsLayer,
+			Point,
+			Extent,
+			PictureMarkerSymbol,
+			SimpleMarkerSymbol,
+			SimpleLineSymbol,
+			SimpleFillSymbol]) => {
 
-            // 初始化几何服务
-            if (this.geoUrl) {
-                this.geometryService = new GeometryService(this.geoUrl);
-            } else {
-                throw 'geoUrl未配置，将导致坐标转换等功能无法使用！'
-            }
+			// 初始化模块
+			this.Map = Map;
+			this.Extent = Extent;
+			this.Geoprocessor = Geoprocessor;
+			this.ProjectParameters = ProjectParameters;
+			this.ArcGISTiledMapServiceLayer = ArcGISTiledMapServiceLayer;
+			this.GraphicsLayer = GraphicsLayer;
+			this.Point = Point;
+			this.PictureMarkerSymbol = PictureMarkerSymbol;
+			this.Graphic = Graphic;
+			this.SpatialReference = SpatialReference;
+			this.FeatureSet = FeatureSet;
+			this.SimpleMarkerSymbol = SimpleMarkerSymbol;
+			this.SimpleLineSymbol = SimpleLineSymbol;
+			this.SimpleFillSymbol = SimpleFillSymbol;
 
-            // 设置代理
-            if (this.isProxy) {
-                esriConfig.defaults.io.proxyUrl = 'proxy.jsp';
-                esriConfig.defaults.io.alwaysUseProxy = true;
-                urlUtils.addProxyRule({
-                    urlPrefix: "route.arcgis.com",
-                    proxyUrl: 'proxy.jsp'
-                });
-            }
+			// 初始化几何服务
+			if (this.geoUrl) {
+				this.geometryService = new GeometryService(this.geoUrl);
+			} else {
+				throw new Error('geoUrl未配置，将导致坐标转换等功能无法使用！');
+			}
 
-            // 初始化地图
-            this.map = new Map(this.mapEle.nativeElement, {
-                logo: false,
-                slider: false
-            });
+			// 设置代理
+			if (this.isProxy) {
+				esriConfig.defaults.io.proxyUrl = 'proxy.jsp';
+				esriConfig.defaults.io.alwaysUseProxy = true;
+				urlUtils.addProxyRule({
+					urlPrefix: 'route.arcgis.com',
+					proxyUrl: 'proxy.jsp'
+				});
+			}
 
-            // 加载底图
-            if (this.mapType === 'tdt') {
-                this.getTdtLayer(Array.isArray(this.mapUrl) ? this.mapUrl : [this.mapUrl]).then((layers: any[]) => {
-                    layers.forEach((layer: any) => {
-                        this.map.addLayer(layer);
-                    });
-                });
-            } else if (this.mapType === 'esri') {
-                this.map.addLayer(new this.ArcGISTiledMapServiceLayer(this.mapUrl));
-            } else {
-                throw '请指定输入属性 mapType 的值！';
-            }
+			// 初始化地图
+			this.map = new Map(this.mapEle.nativeElement, {
+				logo: false,
+				slider: false
+			});
 
-            // 注册地图相关事件
-            this.addMapEvent();
-        });
-    }
+			// 加载底图
+			if (this.mapType === 'tdt') {
+				this.getTdtLayer(Array.isArray(this.mapUrl) ? this.mapUrl : [this.mapUrl]).then((layers: any[]) => {
+					layers.forEach((layer: any) => {
+						this.map.addLayer(layer);
+					});
+				});
+			} else if (this.mapType === 'esri') {
+				this.map.addLayer(new this.ArcGISTiledMapServiceLayer(this.mapUrl));
+			} else {
+				throw new Error('请指定输入属性 mapType 的值！');
+			}
 
-    /**
-     * 加载arcgis api for javascript的模块
-     * @param modules
-     * @returns {Promise<any>}
-     */
-    loadEsriModules(modules: string[]): Promise<any> {
-        return this.esriLoaderService.loadModules(modules);
-    }
+			// 注册地图相关事件
+			this.addMapEvent();
+		});
+	}
 
-    /**
-     * 获取天地图图层
-     * @param layers 图层的代码
-     * @returns {Promise<T>}
-     */
-    private getTdtLayer(layers: string[]): Promise<any> {
-        return new Promise((resolve) => {
-            this.loadEsriModules([
-                "esri/layers/TileInfo",
-                "esri/layers/WebTiledLayer"])
-                .then(([
-                           TileInfo,
-                           WebTiledLayer
-                       ]) => {
-                    this.TileInfo = TileInfo;
-                    let tileInfo: any = new TileInfo({
-                        rows: 256,
-                        cols: 256,
-                        compressionQuality: 0,
-                        origin: {
-                            x: -180,
-                            y: 90
-                        },
-                        spatialReference: {
-                            wkid: 4326
-                        },
-                        lods: [
-                            {"level": 2, "resolution": 0.3515625, "scale": 147748796.52937502},
-                            {"level": 3, "resolution": 0.17578125, "scale": 73874398.264687508},
-                            {"level": 4, "resolution": 0.087890625, "scale": 36937199.132343754},
-                            {"level": 5, "resolution": 0.0439453125, "scale": 18468599.566171877},
-                            {"level": 6, "resolution": 0.02197265625, "scale": 9234299.7830859385},
-                            {"level": 7, "resolution": 0.010986328125, "scale": 4617149.8915429693},
-                            {"level": 8, "resolution": 0.0054931640625, "scale": 2308574.9457714846},
-                            {"level": 9, "resolution": 0.00274658203125, "scale": 1154287.4728857423},
-                            {"level": 10, "resolution": 0.001373291015625, "scale": 577143.73644287116},
-                            {"level": 11, "resolution": 0.0006866455078125, "scale": 288571.86822143558},
-                            {"level": 12, "resolution": 0.00034332275390625, "scale": 144285.93411071779},
-                            {"level": 13, "resolution": 0.000171661376953125, "scale": 72142.967055358895},
-                            {"level": 14, "resolution": 8.58306884765625e-005, "scale": 36071.483527679447},
-                            {"level": 15, "resolution": 4.291534423828125e-005, "scale": 18035.741763839724},
-                            {"level": 16, "resolution": 2.1457672119140625e-005, "scale": 9017.8708819198619},
-                            {"level": 17, "resolution": 1.0728836059570313e-005, "scale": 4508.9354409599309},
-                            {"level": 18, "resolution": 5.3644180297851563e-006, "scale": 2254.4677204799655}
-                        ]
-                    });
-                    let subDomains: string[] = ["t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7"];
-                    let tdtLayers: any[] = [];
-                    layers.forEach((type) => {
-                        let templateUrl: string = 'http://${subDomain}.tianditu.com/DataServer?T=' + type + '_c&X=${col}&Y=${row}&L=${level}';
-                        let tdtLayer: any = new WebTiledLayer(templateUrl, {
-                            id: "tdt_" + type,
-                            subDomains: subDomains,
-                            tileInfo: tileInfo
-                        });
-                        tdtLayers.push(tdtLayer);
-                    });
-                    resolve(tdtLayers);
-                });
-        });
-    }
+	/**
+	 * 加载arcgis api for javascript的模块
+	 * @param modules
+	 * @returns {Promise<any>}
+	 */
+	loadEsriModules(modules: string[]): Promise<any> {
+		return this.esriLoaderService.loadModules(modules);
+	}
 
-    zoomIn() {
-        this.isMax = this.map.getZoom() >= this.map.getMaxZoom();
-        if (!this.isMax) {
-            this.map.setZoom(this.map.getZoom() + 1);
-        }
-    }
+	/**
+	 * 获取天地图图层
+	 * @param layers 图层的代码
+	 * @returns {Promise<T>}
+	 */
+	private getTdtLayer(layers: string[]): Promise<any> {
+		return new Promise((resolve) => {
+			this.loadEsriModules([
+				'esri/layers/TileInfo',
+				'esri/layers/WebTiledLayer'])
+				.then(([TileInfo, WebTiledLayer]) => {
+					this.TileInfo = TileInfo;
+					const tileInfo: any = new TileInfo({
+						rows: 256,
+						cols: 256,
+						compressionQuality: 0,
+						origin: {
+							x: -180,
+							y: 90
+						},
+						spatialReference: {
+							wkid: 4326
+						},
+						lods: [
+							{'level': 2, 'resolution': 0.3515625, 'scale': 147748796.52937502},
+							{'level': 3, 'resolution': 0.17578125, 'scale': 73874398.264687508},
+							{'level': 4, 'resolution': 0.087890625, 'scale': 36937199.132343754},
+							{'level': 5, 'resolution': 0.0439453125, 'scale': 18468599.566171877},
+							{'level': 6, 'resolution': 0.02197265625, 'scale': 9234299.7830859385},
+							{'level': 7, 'resolution': 0.010986328125, 'scale': 4617149.8915429693},
+							{'level': 8, 'resolution': 0.0054931640625, 'scale': 2308574.9457714846},
+							{'level': 9, 'resolution': 0.00274658203125, 'scale': 1154287.4728857423},
+							{'level': 10, 'resolution': 0.001373291015625, 'scale': 577143.73644287116},
+							{'level': 11, 'resolution': 0.0006866455078125, 'scale': 288571.86822143558},
+							{'level': 12, 'resolution': 0.00034332275390625, 'scale': 144285.93411071779},
+							{'level': 13, 'resolution': 0.000171661376953125, 'scale': 72142.967055358895},
+							{'level': 14, 'resolution': 8.58306884765625e-005, 'scale': 36071.483527679447},
+							{'level': 15, 'resolution': 4.291534423828125e-005, 'scale': 18035.741763839724},
+							{'level': 16, 'resolution': 2.1457672119140625e-005, 'scale': 9017.8708819198619},
+							{'level': 17, 'resolution': 1.0728836059570313e-005, 'scale': 4508.9354409599309},
+							{'level': 18, 'resolution': 5.3644180297851563e-006, 'scale': 2254.4677204799655}
+						]
+					});
+					const subDomains: string[] = ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7'];
+					const tdtLayers: any[] = [];
+					layers.forEach((type) => {
+						const templateUrl: string = 'http://${subDomain}.tianditu.com/DataServer?T=' + type + '_c&X=${col}&Y=${row}&L=${level}';
+						const tdtLayer: any = new WebTiledLayer(templateUrl, {
+							id: 'tdt_' + type,
+							subDomains: subDomains,
+							tileInfo: tileInfo
+						});
+						tdtLayers.push(tdtLayer);
+					});
+					resolve(tdtLayers);
+				});
+		});
+	}
 
-    zoomOut() {
-        this.isMin = this.map.getZoom() <= this.map.getMinZoom();
-        if (!this.isMin) {
-            this.map.setZoom(this.map.getZoom() - 1);
-        }
-    }
+	zoomIn() {
+		this.isMax = this.map.getZoom() >= this.map.getMaxZoom();
+		if (!this.isMax) {
+			this.map.setZoom(this.map.getZoom() + 1);
+		}
+	}
 
-    fullMap() {
-        this.map.setExtent(new this.Extent(this.initExtent));
-    }
+	zoomOut() {
+		this.isMin = this.map.getZoom() <= this.map.getMinZoom();
+		if (!this.isMin) {
+			this.map.setZoom(this.map.getZoom() - 1);
+		}
+	}
 
-    /**
-     * 地图注册事件
-     */
-    private addMapEvent() {
-        this.map.on("load", () => {
-            if (this.initExtent) {
-                this.initExtent.spatialReference = this.map.spatialReference;
-                this.map.setExtent(new this.Extent(this.initExtent));
-            } else {
-                this.initExtent = this.map.extent;
-            }
-            this.mapReady.emit(this);
-        });
+	fullMap() {
+		this.map.setExtent(new this.Extent(this.initExtent));
+	}
 
-        this.map.on("extent-change", (event) => {
-            this.isMax = this.map.getZoom() >= this.map.getMaxZoom();
-            this.isMin = this.map.getZoom() <= this.map.getMinZoom();
-            this.exentChange.emit(event);
-        });
-    }
+	/**
+	 * 地图注册事件
+	 */
+	private addMapEvent() {
+		this.map.on('load', () => {
+			if (this.initExtent) {
+				this.initExtent.spatialReference = this.map.spatialReference;
+				this.map.setExtent(new this.Extent(this.initExtent));
+			} else {
+				this.initExtent = this.map.extent;
+			}
+			this.mapReady.emit(this);
+		});
 
-    /**
-     * GP服务获取数据（异步）
-     * @param params
-     */
-    gpAsyncGetResultData(params: AsyncGetResultParam): void {
-        let gp = new this.Geoprocessor(params.url);
-        gp.submitJob(params.inParamVal, (jobInfo: any) => {
-            gp.getResultData(jobInfo.jobId, params.outParamName, (result: any) => {
-                params.success(result);
-            }, (error: any) => {
-                params.error(error);
-            });
-        }, (jobInfo: any) => {
-            params.status && params.status(jobInfo);
-        }, (error: any) => {
-            params.error(error);
-        });
-    }
+		this.map.on('extent-change', (event) => {
+			this.isMax = this.map.getZoom() >= this.map.getMaxZoom();
+			this.isMin = this.map.getZoom() <= this.map.getMinZoom();
+			this.exentChange.emit(event);
+		});
+	}
 
-    /**
-     * 点定位
-     * @param point
-     */
-    locationPoint(point: { x: number, y: number }): void {
-        this.locationLayer || (this.locationLayer = new this.GraphicsLayer());
-        let mp = new this.Point({
-                x: point.x,
-                y: point.y,
-                spatialReference: this.map.spatialReference
-            }),
-            mpSymbol = new this.PictureMarkerSymbol({
-                url: "assets/images/map/location.gif",
-                height: 40,
-                width: 40
-            }),
-            gra = new this.Graphic(mp, mpSymbol);
+	/**
+	 * GP服务获取数据（异步）
+	 * @param params
+	 */
+	gpAsyncGetResultData(params: AsyncGetResultParam): void {
+		const gp = new this.Geoprocessor(params.url);
+		gp.submitJob(params.inParamVal, (jobInfo: any) => {
+			gp.getResultData(jobInfo.jobId, params.outParamName, (result: any) => {
+				params.success(result);
+			}, (error: any) => {
+				params.error(error);
+			});
+		}, (jobInfo: any) => {
+			if (params.status) {
+				params.status(jobInfo);
+			}
+		}, (error: any) => {
+			params.error(error);
+		});
+	}
 
-        this.locationLayer.clear();
-        this.locationLayer.add(gra);
-        this.map.addLayer(this.locationLayer, 0);
-        this.map.centerAt(mp);
+	/**
+	 * 点定位
+	 * @param point
+	 */
+	locationPoint(point: { x: number, y: number }): void {
+		if (!this.locationLayer) {
+			this.locationLayer = new this.GraphicsLayer();
+		}
+		const mp = new this.Point({
+				x: point.x,
+				y: point.y,
+				spatialReference: this.map.spatialReference
+			}),
+			mpSymbol = new this.PictureMarkerSymbol({
+				url: 'assets/images/map/location.gif',
+				height: 40,
+				width: 40
+			}),
+			gra = new this.Graphic(mp, mpSymbol);
 
-        // 清除定时器
-        this.timeOutId && window.clearTimeout(this.timeOutId);
+		this.locationLayer.clear();
+		this.locationLayer.add(gra);
+		this.map.addLayer(this.locationLayer, 0);
+		this.map.centerAt(mp);
 
-        // 10s之后清除定位动画gif
-        this.timeOutId = window.setTimeout(() => {
-            window.clearTimeout(this.timeOutId);
-            this.locationLayer.clear();
-        }, 10000);
-    }
+		// 清除定时器
+		if (this.timeOutId) {
+			window.clearTimeout(this.timeOutId);
+		}
 
-    /**
-     * 清除定位图层
-     */
-    clearLocationLayer() {
-        if (this.locationLayer) {
-            this.locationLayer.clear();
-        }
-    }
+		// 10s之后清除定位动画gif
+		this.timeOutId = window.setTimeout(() => {
+			window.clearTimeout(this.timeOutId);
+			this.locationLayer.clear();
+		}, 10000);
+	}
 
-    /**
-     * 显示地图信息窗口
-     * @param params 信息窗口参数，属性如下：
-     * title {String} 信息窗口标题
-     * content {String} 信息窗口内容，支持html
-     * location {Point} 信息窗口位置
-     * placement {String} 信息窗口方位
-     * width {Number} 信息窗口宽度
-     * height {Number} 信息窗口高度
-     */
-    showMapInfoWindow(params: any): void {
-        this.map.infoWindow.setTitle(params.title);
-        this.map.infoWindow.setContent(params.content);
-        this.map.infoWindow.resize(params.width || 200, params.height || 300);
-        this.map.infoWindow.show(params.location, this.map.getInfoWindowAnchor(this.map.toScreen(params.location)));
-    }
+	/**
+	 * 清除定位图层
+	 */
+	clearLocationLayer() {
+		if (this.locationLayer) {
+			this.locationLayer.clear();
+		}
+	}
 
-    /**
-     * 隐藏地图信息窗口
-     */
-    hideMapInfoWindow(): void {
-        this.map.infoWindow.hide();
-    }
+	/**
+	 * 显示地图信息窗口
+	 * @param params 信息窗口参数，属性如下：
+	 * title {String} 信息窗口标题
+	 * content {String} 信息窗口内容，支持html
+	 * location {Point} 信息窗口位置
+	 * placement {String} 信息窗口方位
+	 * width {Number} 信息窗口宽度
+	 * height {Number} 信息窗口高度
+	 */
+	showMapInfoWindow(params: any): void {
+		this.map.infoWindow.setTitle(params.title);
+		this.map.infoWindow.setContent(params.content);
+		this.map.infoWindow.resize(params.width || 200, params.height || 300);
+		this.map.infoWindow.show(params.location, this.map.getInfoWindowAnchor(this.map.toScreen(params.location)));
+	}
 
-    /**
-     * 要素坐标转换
-     * @param fs 转换的要素集
-     * @param wkid 转换的坐标编码
-     * @returns {Observable<any>}
-     */
-    exactProject(fs: any, wkid: any): Observable<any> {
-        return new Observable<any>((subscriber: Subscriber<any>) => {
-            let geometries = [],
-                attrs = [],
-                len = fs.features.length,
-                ps = new this.ProjectParameters(),
-                sr = new this.SpatialReference(wkid);
-            for (let i = 0; i < len; i++) {
-                let gra = fs.features[i];
-                geometries.push(gra.geometry);
-                attrs.push(gra.attributes);
-            }
-            ps.geometries = geometries;
-            ps.outSR = sr;
-            this.geometryService.project(ps, (gs: any) => {
-                let f = new this.FeatureSet({
-                        features: [],
-                        spatialReference: sr
-                    }),
-                    len = gs.length;
+	/**
+	 * 隐藏地图信息窗口
+	 */
+	hideMapInfoWindow(): void {
+		this.map.infoWindow.hide();
+	}
 
-                for (let j = 0; j < len; j++) {
-                    let geo = gs[j],
-                        attr = attrs[j],
-                        pt = new this.Point(geo.x, geo.y, sr),
-                        gra = new this.Graphic(pt, null, attr);
+	/**
+	 * 要素坐标转换
+	 * @param fs 转换的要素集
+	 * @param wkid 转换的坐标编码
+	 * @returns {Observable<any>}
+	 */
+	exactProject(fs: any, wkid: any): Observable<any> {
+		return new Observable<any>((subscriber: Subscriber<any>) => {
+			const geometries = [],
+				attrs = [],
+				len = fs.features.length,
+				ps = new this.ProjectParameters(),
+				sr = new this.SpatialReference(wkid);
+			for (let i = 0; i < len; i++) {
+				const gra = fs.features[i];
+				geometries.push(gra.geometry);
+				attrs.push(gra.attributes);
+			}
+			ps.geometries = geometries;
+			ps.outSR = sr;
+			this.geometryService.project(ps, (gs: any) => {
+				const f = new this.FeatureSet({
+						features: [],
+						spatialReference: sr
+					}),
+					len2 = gs.length;
 
-                    f.features.push(gra);
-                }
-                subscriber.next({
-                    code: 'success',
-                    data: f
-                });
-                subscriber.complete();
-            }, (error: any) => {
-                subscriber.next({
-                    code: 'failed',
-                    data: error
-                });
-                subscriber.complete();
-            });
-        });
-    };
+				for (let j = 0; j < len2; j++) {
+					const geo = gs[j],
+						attr = attrs[j],
+						pt = new this.Point(geo.x, geo.y, sr),
+						gra = new this.Graphic(pt, null, attr);
 
-    /**
-     * 将坐标由度分秒表示转为十进制表示
-     * @param dfm 度分秒表示-180°0′0″
-     * @returns {number} 十进制
-     */
-    latToDec(dfm: string): number {
-        let lod = Number(dfm.split("°")[0]),
-            lom = Number(dfm.split("°")[1].split("′")[0]),
-            los = Number(dfm.split("°")[1].split("′")[1].split("″")[0]);
+					f.features.push(gra);
+				}
+				subscriber.next({
+					code: 'success',
+					data: f
+				});
+				subscriber.complete();
+			}, (error: any) => {
+				subscriber.next({
+					code: 'failed',
+					data: error
+				});
+				subscriber.complete();
+			});
+		});
+	};
 
-        return lod + lom / 60 + los / 3600;
-    };
+	/**
+	 * 将坐标由度分秒表示转为十进制表示
+	 * @param dfm 度分秒表示-180°0′0″
+	 * @returns {number} 十进制
+	 */
+	latToDec(dfm: string): number {
+		const lod = Number(dfm.split('°')[0]),
+			lom = Number(dfm.split('°')[1].split('′')[0]),
+			los = Number(dfm.split('°')[1].split('′')[1].split('″')[0]);
 
-    /**
-     * 将坐标由十进制表示转为度分秒表示
-     * @param sjz 十进制表示-180.00
-     * @returns {string} 度分秒表示-180°0′0″
-     */
-    decToLat(sjz: number): string {
-        let d = String(sjz).split("."),
-            f = String(Number("0." + d[1]) * 60).split(".");
+		return lod + lom / 60 + los / 3600;
+	};
 
-        return d[0] + "°" + f[0] + "′" + (Number("0." + f[1]) * 60).toFixed(2) + "″";
-    };
+	/**
+	 * 将坐标由十进制表示转为度分秒表示
+	 * @param sjz 十进制表示-180.00
+	 * @returns {string} 度分秒表示-180°0′0″
+	 */
+	decToLat(sjz: number): string {
+		const d = String(sjz).split('.'),
+			f = String(Number('0.' + d[1]) * 60).split('.');
+
+		return d[0] + '°' + f[0] + '′' + (Number('0.' + f[1]) * 60).toFixed(2) + '″';
+	};
+
+	/**
+	 * 动态添加esri.css
+	 */
+	private addEsriMapCss(): void {
+		const linkId: string = 'esriCss';
+		if (!document.getElementById(linkId)) {
+			const head = document.getElementsByTagName('head')[0],
+				link = document.createElement('link');
+			link.id = linkId;
+			link.rel = 'stylesheet';
+			link.href = this.esriCssUrl;
+			head.appendChild(link);
+		}
+	}
 }
