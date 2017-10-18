@@ -42,6 +42,8 @@ export class EssenceNg2EsriMapComponent implements OnInit, OnDestroy {
 	// 是否开启代理
 	@Input() isProxy: boolean = false;
 
+	@Input() proxyUrl: string = 'proxy.jsp';
+
 	// 底图路径
 	@Input() mapUrl: string[] | string;
 
@@ -152,11 +154,11 @@ export class EssenceNg2EsriMapComponent implements OnInit, OnDestroy {
 
 			// 设置代理
 			if (this.isProxy) {
-				esriConfig.defaults.io.proxyUrl = 'proxy.jsp';
+				esriConfig.defaults.io.proxyUrl = this.proxyUrl;
 				esriConfig.defaults.io.alwaysUseProxy = true;
 				urlUtils.addProxyRule({
 					urlPrefix: 'route.arcgis.com',
-					proxyUrl: 'proxy.jsp'
+					proxyUrl: this.proxyUrl
 				});
 			}
 
