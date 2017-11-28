@@ -22,6 +22,7 @@ export class EssenceNg2EsriMapComponent implements OnInit, OnDestroy {
 	Point: any;
 	PictureMarkerSymbol: any;
 	Graphic: any;
+	ImageParameters: any;
 	ProjectParameters: any;
 	SpatialReference: any;
 	geometryService: any;
@@ -104,6 +105,7 @@ export class EssenceNg2EsriMapComponent implements OnInit, OnDestroy {
 			'esri/tasks/FeatureSet',
 			'esri/layers/ArcGISTiledMapServiceLayer',
 			'esri/layers/GraphicsLayer',
+			"esri/layers/ImageParameters",
 			'esri/geometry/Point',
 			'esri/geometry/Extent',
 			'esri/symbols/PictureMarkerSymbol',
@@ -122,6 +124,7 @@ export class EssenceNg2EsriMapComponent implements OnInit, OnDestroy {
 			FeatureSet,
 			ArcGISTiledMapServiceLayer,
 			GraphicsLayer,
+			ImageParameters,
 			Point,
 			Extent,
 			PictureMarkerSymbol,
@@ -136,6 +139,7 @@ export class EssenceNg2EsriMapComponent implements OnInit, OnDestroy {
 			this.ProjectParameters = ProjectParameters;
 			this.ArcGISTiledMapServiceLayer = ArcGISTiledMapServiceLayer;
 			this.GraphicsLayer = GraphicsLayer;
+			this.ImageParameters = ImageParameters;
 			this.Point = Point;
 			this.PictureMarkerSymbol = PictureMarkerSymbol;
 			this.Graphic = Graphic;
@@ -295,7 +299,7 @@ export class EssenceNg2EsriMapComponent implements OnInit, OnDestroy {
 
 	/**
 	 * GP服务获取数据（异步）
-	 * @param params
+	 * @param {AsyncGetResultParam} params
 	 */
 	gpAsyncGetResultData(params: AsyncGetResultParam): void {
 		const gp = new this.Geoprocessor(params.url);
@@ -313,6 +317,29 @@ export class EssenceNg2EsriMapComponent implements OnInit, OnDestroy {
 			params.error(error);
 		});
 	}
+
+	/**
+	 * GP服务获取结果图片图层（异步）
+	 * @param {AsyncGetResultParam} params
+	 */
+	gpAsyncGetResultImageLayer(params: AsyncGetResultParam) {
+		const gp = new this.Geoprocessor(params.url);
+		gp.submitJob(params.inParamVal, (jobInfo: any) => {
+			const imageParameters = new this.ImageParameters();
+			imageParameters.imageSpatialReference = this.map.spatialReference;
+			gp.getResultImageLayer(jobInfo.jobId, params.outParamName, imageParameters, (result: any) => {
+				params.success(result);
+			}, (error: any) => {
+				params.error(error);
+			});
+		}, (jobInfo: any) => {
+			if (params.status) {
+				params.status(jobInfo);
+			}
+		}, (error: any) => {
+			params.error(error);
+		});
+	};
 
 	/**
 	 * 点定位

@@ -100,6 +100,8 @@ essence-ng2-esrimap is a esrimap component for Angular.
 
 - `gpAsyncGetResultData(params: AsyncGetResultParam): void` - GP服务获取数据（异步）
 
+- `gpAsyncGetResultImageLayer(params: AsyncGetResultParam): void` - GP服务获取结果图片图层（异步）
+
 - `locationPoint(point: {x: number, y: number}): void` - 点定位
 
 - `clearLocationLayer(): void` - 清除定位图层
