@@ -26,10 +26,14 @@ export class EssenceNg2EsriMapComponent implements OnInit, OnDestroy {
 	ProjectParameters: any;
 	SpatialReference: any;
 	geometryService: any;
+	GeometryService: any;
 	FeatureSet: any;
 	SimpleMarkerSymbol: any;
 	SimpleLineSymbol: any;
 	SimpleFillSymbol: any;
+	QueryTask: any;
+	Query: any;
+	BufferParameters: any;
 
 	// map
 	map: any;
@@ -98,14 +102,18 @@ export class EssenceNg2EsriMapComponent implements OnInit, OnDestroy {
 			'esri/urlUtils',
 			'esri/config',
 			'esri/graphic',
+			'esri/Color',
 			'esri/SpatialReference',
 			'esri/tasks/Geoprocessor',
 			'esri/tasks/ProjectParameters',
 			'esri/tasks/GeometryService',
 			'esri/tasks/FeatureSet',
+			'esri/tasks/QueryTask',
+			'esri/tasks/query',
+			'esri/tasks/BufferParameters',
 			'esri/layers/ArcGISTiledMapServiceLayer',
 			'esri/layers/GraphicsLayer',
-			"esri/layers/ImageParameters",
+			'esri/layers/ImageParameters',
 			'esri/geometry/Point',
 			'esri/geometry/Extent',
 			'esri/symbols/PictureMarkerSymbol',
@@ -117,11 +125,15 @@ export class EssenceNg2EsriMapComponent implements OnInit, OnDestroy {
 			urlUtils,
 			esriConfig,
 			Graphic,
+		 	Color,
 			SpatialReference,
 			Geoprocessor,
 			ProjectParameters,
 			GeometryService,
 			FeatureSet,
+		 	QueryTask,
+			Query,
+			BufferParameters,
 			ArcGISTiledMapServiceLayer,
 			GraphicsLayer,
 			ImageParameters,
@@ -137,6 +149,7 @@ export class EssenceNg2EsriMapComponent implements OnInit, OnDestroy {
 			this.Extent = Extent;
 			this.Geoprocessor = Geoprocessor;
 			this.ProjectParameters = ProjectParameters;
+			this.GeometryService = GeometryService;
 			this.ArcGISTiledMapServiceLayer = ArcGISTiledMapServiceLayer;
 			this.GraphicsLayer = GraphicsLayer;
 			this.ImageParameters = ImageParameters;
@@ -145,13 +158,16 @@ export class EssenceNg2EsriMapComponent implements OnInit, OnDestroy {
 			this.Graphic = Graphic;
 			this.SpatialReference = SpatialReference;
 			this.FeatureSet = FeatureSet;
+			this.Query = Query;
+			this.QueryTask = QueryTask;
+			this.BufferParameters = BufferParameters;
 			this.SimpleMarkerSymbol = SimpleMarkerSymbol;
 			this.SimpleLineSymbol = SimpleLineSymbol;
 			this.SimpleFillSymbol = SimpleFillSymbol;
 
 			// 初始化几何服务
 			if (this.geoUrl) {
-				this.geometryService = new GeometryService(this.geoUrl);
+				this.geometryService = new this.GeometryService(this.geoUrl);
 			} else {
 				throw new Error('geoUrl未配置，将导致坐标转换等功能无法使用！');
 			}
