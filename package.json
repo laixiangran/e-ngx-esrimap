@@ -31,6 +31,7 @@
   "module": "dist/index.js",
   "typings": "dist/index.d.ts",
   "dependencies": {
+    "@types/arcgis-js-api": "^3.22.0",
     "font-awesome": "^4.7.0"
   },
   "devDependencies": {
