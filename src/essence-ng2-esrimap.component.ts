@@ -15,6 +15,7 @@ export class EssenceNg2EsriMapComponent implements OnInit, OnDestroy {
 	// esri modules
 	Map: any;
 	Extent: any;
+	Color: any;
 	TileInfo: any;
 	Geoprocessor: any;
 	ArcGISTiledMapServiceLayer: any;
@@ -147,6 +148,7 @@ export class EssenceNg2EsriMapComponent implements OnInit, OnDestroy {
 			// 初始化模块
 			this.Map = Map;
 			this.Extent = Extent;
+			this.Color = Color;
 			this.Geoprocessor = Geoprocessor;
 			this.ProjectParameters = ProjectParameters;
 			this.GeometryService = GeometryService;
