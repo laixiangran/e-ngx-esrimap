@@ -32,6 +32,8 @@ export class EssenceNg2EsriMapComponent implements OnInit, OnDestroy {
 	SimpleMarkerSymbol: any;
 	SimpleLineSymbol: any;
 	SimpleFillSymbol: any;
+	IdentifyTask: any;
+	IdentifyParameters: any;
 	QueryTask: any;
 	Query: any;
 	BufferParameters: any;
@@ -109,6 +111,8 @@ export class EssenceNg2EsriMapComponent implements OnInit, OnDestroy {
 			'esri/tasks/ProjectParameters',
 			'esri/tasks/GeometryService',
 			'esri/tasks/FeatureSet',
+			'esri/tasks/IdentifyTask',
+			'esri/tasks/IdentifyParameters',
 			'esri/tasks/QueryTask',
 			'esri/tasks/query',
 			'esri/tasks/BufferParameters',
@@ -132,6 +136,8 @@ export class EssenceNg2EsriMapComponent implements OnInit, OnDestroy {
 			ProjectParameters,
 			GeometryService,
 			FeatureSet,
+			IdentifyTask,
+			IdentifyParameters,
 		 	QueryTask,
 			Query,
 			BufferParameters,
@@ -160,6 +166,8 @@ export class EssenceNg2EsriMapComponent implements OnInit, OnDestroy {
 			this.Graphic = Graphic;
 			this.SpatialReference = SpatialReference;
 			this.FeatureSet = FeatureSet;
+			this.IdentifyTask = IdentifyTask;
+			this.IdentifyParameters = IdentifyParameters;
 			this.Query = Query;
 			this.QueryTask = QueryTask;
 			this.BufferParameters = BufferParameters;
