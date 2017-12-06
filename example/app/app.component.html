@@ -2,13 +2,12 @@
 	<h1>esrimap Component for Angular</h1>
 	<div style="height: 600px;">
 		<essence-ng2-esrimap
+				[isProxy]="false"
+				[mapUrl]="mapUrl"
 				[gisApiUrl]="gisApiUrl"
 				[geoUrl]="geoUrl"
 				[esriCSSUrl]="esriCSSUrl"
-				[mapUrl]="mapUrl"
-				[mapType]="mapType"
-				(mapReady)="onMapReady($event)"
-				(exentChange)="onExentChange($event)">
+				(mapReady)="onMapReady($event)">
 		</essence-ng2-esrimap>
 	</div>
 </div>

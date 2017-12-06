@@ -9,11 +9,10 @@ import { environment } from '../environments/environment';
 })
 export class AppComponent implements OnInit {
 	esriMap: EssenceNg2EsriMapComponent;
-	mapUrl: string[] = ['vec', 'cva'];
-	mapType: string = 'tdt';
+	mapUrl: string = environment.mapUrl; // 底图路径
 	geoUrl: string = environment.geoUrl; // 几何服务路径
 	gisApiUrl: string = environment.gisApiUrl; // arcgis javascript API路径
-	esriCSSUrl: string = environment.esriCSSUrl; // arcgis javascript API路径
+	esriCSSUrl: string = environment.esriCSSUrl;
 
 	constructor() {
 	}
@@ -21,15 +20,11 @@ export class AppComponent implements OnInit {
 	ngOnInit() {
 	}
 
-	onMapReady($event: EssenceNg2EsriMapComponent) {
-		this.esriMap = $event;
-	}
-
 	/**
-	 * 地图范围改变的事件
+	 * 地图加载完成
 	 * @param $event
 	 */
-	onExentChange(event: any) {
-		// console.log(event);
+	onMapReady($event: EssenceNg2EsriMapComponent) {
+		this.esriMap = $event;
 	}
 }
