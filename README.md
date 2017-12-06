@@ -72,7 +72,7 @@ essence-ng2-esrimap is a esrimap component for Angular.
 
 - `proxyUrl`（`string?='proxy.jsp'`） - 代理页面的路径
 
-- `mapUrl`（`string[] | string`） - 基础底图路径
+- `mapUrl`（`string[] | string`） - 基础底图路径，如`mapType='tdt'`，则mapUrl可从这四种地图类型`vec（矢量图层）, cva（矢量标注）, img（影像图层）, cia（影像标注）`通过数组形式组合使用。mapType='esri'，则mapUrl是完整的ArcGIS切片地图服务路径
 
 - `mapType`（`string?='esri'`） - 基础底图类型，`tdt`：天地图，`esri`：esri地图服务
 
