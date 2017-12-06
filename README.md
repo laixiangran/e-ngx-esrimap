@@ -78,7 +78,7 @@ essence-ng2-esrimap is a esrimap component for Angular.
 
 - `geoUrl`（`string?='http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer'`） - 几何服务路径，默认是在线路径，最好配置自己的路径
 
-- `geoUrl`（`string?='http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer'`） - 几何服务路径，默认是在线路径，最好配置自己的路径
+- `gisApiUrl`（`string?='http://js.arcgis.com/3.14/'`） - arcgis javascript API路径，默认是在线路径，最好配置自己的路径
 
 - `esriCSSUrl`（`string?='http://js.arcgis.com/3.14/esri/css/esri.css'`） - esri.css路径，默认是在线路径，最好配置自己的路径
 
