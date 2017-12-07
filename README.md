@@ -68,7 +68,7 @@ essence-ng2-esrimap is a esrimap component for Angular.
 
 ### Inputs
 
-- `isProxy`（`boolean?=false`） - 是否开启代理
+- `isProxy`（`boolean?=false`） - 是否开启代理，可使用esri提供的[几个平台的代理文件](https://github.com/Esri/resource-proxy)
 
 - `proxyUrl`（`string?='proxy.jsp'`） - 代理页面的路径
 
