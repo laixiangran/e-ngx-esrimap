@@ -1,13 +1,13 @@
-# essence-ng2-esrimap
+# e-ngx-esrimap
 
-essence-ng2-esrimap is a esrimap component for Angular.
+e-ngx-esrimap is a component for Angular to work with ArcGIS API for JavaScript v3.14.
 
 ## Usage
 
 1. Install
 
 	```shell
-	npm install --save essence-ng2-esrimap@latest
+	npm install --save e-ngx-esrimap@latest
 	```
 
 2. Set in the .angular-cli.json（@angular/cli）
@@ -18,13 +18,13 @@ essence-ng2-esrimap is a esrimap component for Angular.
     ]
 	```
 
-3. Add the EssenceNg2EsriMapModule
+3. Add the ENgxEsriMapModule
 
 	```typescript
-	import {EssenceNg2EsriMapModule} from "essence-ng2-esrimap";
+	import {ENgxEsriMapModule} from "e-ngx-esrimap";
 	@NgModule({
 	    imports: [
-	        EssenceNg2EsriMapModule
+	        ENgXEsriMapModule
 	    ]
 	})
 	```
@@ -32,26 +32,26 @@ essence-ng2-esrimap is a esrimap component for Angular.
 4. Use in the template
 
 	```html
-    <essence-ng2-esrimap
+    <e-ngx-esrimap
             [gisApiUrl]="gisApiUrl"
             [geoUrl]="geoUrl"
             [mapUrl]="mapUrl"
             [esriCSSUrl]="esriCSSUrl"
             (mapReady)="onMapReady($event)"
             (exentChange)="onExentChange($event)">
-    </essence-ng2-esrimap>
+    </e-ngx-esrimap>
 	```
 
 5. Use in the component
 
 	```typescript
-    esriMap: EssenceNg2EsriMapComponent;
+    esriMap: ENgxEsriMapComponent;
     mapUrl: string = 'http://192.168.0.109:8399/arcgis/rest/services/HD_BASEMAP/MapServer';
     geoUrl: string = 'http://192.168.0.109:8399/arcgis/rest/services/Geometry/GeometryServer';
     gisApiUrl: string = 'http://192.168.0.109/arcgis_api/3.14/init.js';
     esriCSSUrl: string = 'http://192.168.0.8/arcgis_api/3.14/esri/css/esri.css'; // esri.css路径
 
-    onMapReady($event: EssenceNg2EsriMapComponent) {
+    onMapReady($event: ENgxEsriMapComponent) {
         this.esriMap = $event;
     }
 

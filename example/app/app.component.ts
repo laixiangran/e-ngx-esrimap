@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { EssenceNg2EsriMapComponent } from '../../src/essence-ng2-esrimap.component';
 import { environment } from '../environments/environment';
+import { ENgxEsriMapComponent } from '../../src/e-ngx-esrimap.component';
 
 @Component({
 	selector: 'app-root',
@@ -8,7 +8,7 @@ import { environment } from '../environments/environment';
 	styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-	esriMap: EssenceNg2EsriMapComponent;
+	esriMap: ENgxEsriMapComponent;
 	mapUrl: string = environment.mapUrl; // 底图路径
 	geoUrl: string = environment.geoUrl; // 几何服务路径
 	gisApiUrl: string = environment.gisApiUrl; // arcgis javascript API路径
@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
 	 * 地图加载完成
 	 * @param $event
 	 */
-	onMapReady($event: EssenceNg2EsriMapComponent) {
+	onMapReady($event: ENgxEsriMapComponent) {
 		this.esriMap = $event;
 	}
 }

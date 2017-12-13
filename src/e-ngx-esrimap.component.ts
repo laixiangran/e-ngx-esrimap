@@ -3,14 +3,14 @@ import { Observable } from 'rxjs/Observable';
 import { Subscriber } from 'rxjs/Subscriber';
 
 import { AsyncGetResultParam } from './models/AsyncGetResultParam';
-import { EssenceEsriLoaderService } from './essence-esri-loader.service';
+import { ENgxEsriMapLoaderService } from './e-ngx-esrimap-loader.service';
 
 @Component({
-	selector: 'essence-ng2-esrimap',
-	templateUrl: './essence-ng2-esrimap.component.html',
-	styleUrls: ['./essence-ng2-esrimap.component.scss']
+	selector: 'e-ngx-esrimap',
+	templateUrl: './e-ngx-esrimap.component.html',
+	styleUrls: ['./e-ngx-esrimap.component.scss']
 })
-export class EssenceNg2EsriMapComponent implements OnInit, OnDestroy {
+export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 
 	// esri modules
 	Map: any;
@@ -45,7 +45,7 @@ export class EssenceNg2EsriMapComponent implements OnInit, OnDestroy {
 	isMax: boolean = false; // 比例是否最大
 	isMin: boolean = false; // 比例是否最小
 
-	@ViewChild('map') mapEle: ElementRef;
+	@ViewChild('emap') emapEle: ElementRef;
 
 	// 是否开启代理
 	@Input() isProxy: boolean = false;
@@ -78,7 +78,7 @@ export class EssenceNg2EsriMapComponent implements OnInit, OnDestroy {
 	@Output()
 	exentChange: EventEmitter<any> = new EventEmitter<any>(false);
 
-	constructor(private esriLoaderService: EssenceEsriLoaderService) {}
+	constructor(private esriLoaderService: ENgxEsriMapLoaderService) {}
 
 	ngOnInit() {
 		this.addEsriMapCss();
@@ -193,7 +193,7 @@ export class EssenceNg2EsriMapComponent implements OnInit, OnDestroy {
 			}
 
 			// 初始化地图
-			this.map = new Map(this.mapEle.nativeElement, {
+			this.map = new Map(this.emapEle.nativeElement, {
 				logo: false,
 				slider: false
 			});

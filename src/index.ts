@@ -3,7 +3,7 @@
  * homepage：http://www.laixiangran.cn
  */
 
-export { EssenceNg2EsriMapModule } from './essence-ng2-esrimap.module';
-export { EssenceNg2EsriMapComponent } from './essence-ng2-esrimap.component';
-export { EssenceEsriLoaderService } from './essence-esri-loader.service';
+export { ENgxEsriMapModule } from './e-ngx-esrimap.module';
+export { ENgxEsriMapComponent } from './e-ngx-esrimap.component';
+export { ENgxEsriMapLoaderService } from './e-ngx-esrimap-loader.service';
 export { AsyncGetResultParam } from './models/AsyncGetResultParam';

@@ -3,13 +3,13 @@ import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
-import { EssenceNg2EsriMapModule } from '../../src/essence-ng2-esrimap.module';
+import { ENgxEsriMapModule } from '../../src/e-ngx-esrimap.module';
 
 @NgModule({
 	imports: [
 		BrowserModule,
 		HttpModule,
-		EssenceNg2EsriMapModule
+		ENgxEsriMapModule
 	],
 	declarations: [
 		AppComponent

@@ -1,16 +1,16 @@
 {
-  "name": "essence-ng2-esrimap",
-  "version": "1.1.8",
-  "description": "essence-ng2-esrimap is a component for Angular to work with ArcGIS API for JavaScript v3.14.",
+  "name": "e-ngx-esrimap",
+  "version": "1.2.0",
+  "description": "e-ngx-esrimap is a component for Angular to work with ArcGIS API for JavaScript v3.14.",
   "keywords": [
     "angular",
     "ArcGIS API for JavaScript",
     "laixiangran"
   ],
-  "homepage": "https://github.com/laixiangran/essence-ng2-esrimap#readme",
+  "homepage": "https://github.com/laixiangran/e-ngx-esrimap#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/laixiangran/essence-ng2-esrimap.git"
+    "url": "https://github.com/laixiangran/e-ngx-esrimap.git"
   },
   "author": {
     "name": "赖祥燃",
@@ -20,7 +20,7 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/laixiangran/essence-ng2-esrimap/issues"
+    "url": "https://github.com/laixiangran/e-ngx-esrimap/issues"
   },
   "scripts": {
     "release": "gulp prepublish && ngc && npm publish",
