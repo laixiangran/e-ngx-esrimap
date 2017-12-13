@@ -1,6 +1,6 @@
 # e-ngx-esrimap
 
-e-ngx-esrimap is a component for Angular to work with ArcGIS API for JavaScript v3.14.
+基于Angular的二维地图组件，使用的地图API是ArcGIS API for JavaScript v3.14。
 
 ## Usage
 
