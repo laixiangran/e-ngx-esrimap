@@ -59,10 +59,10 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 	@Input() geoUrl: string = 'http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer';
 
 	// arcgis javascript api路径
-	@Input() gisApiUrl: string = 'http://js.arcgis.com/3.14/';
+	@Input() gisApiUrl: string = 'http://js.arcgis.com/3.23/';
 
 	// esri.css路径
-	@Input() esriCSSUrl: string = 'http://js.arcgis.com/3.14/esri/css/esri.css';
+	@Input() esriCSSUrl: string = 'http://js.arcgis.com/3.23/esri/css/esri.css';
 
 	// 底图类型
 	@Input() mapType: string = 'esri';

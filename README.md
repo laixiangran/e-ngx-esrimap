@@ -1,6 +1,6 @@
 # e-ngx-esrimap
 
-基于Angular的二维地图组件，使用的地图API是ArcGIS API for JavaScript v3.23。
+基于Angular的二维地图组件，使用的地图API是ArcGIS API for JavaScript v3.x（>=3.14）。
 
 ## Usage
 
@@ -48,8 +48,8 @@
     esriMap: ENgxEsriMapComponent;
     mapUrl: string = 'http://192.168.0.109:8399/arcgis/rest/services/HD_BASEMAP/MapServer';
     geoUrl: string = 'http://192.168.0.109:8399/arcgis/rest/services/Geometry/GeometryServer';
-    gisApiUrl: string = 'http://192.168.0.109/arcgis_api/3.14/init.js';
-    esriCSSUrl: string = 'http://192.168.0.8/arcgis_api/3.14/esri/css/esri.css'; // esri.css路径
+    gisApiUrl: string = 'http://192.168.0.8/arcgis_api/3.x/init.js';
+    esriCSSUrl: string = 'http://192.168.0.8/arcgis_api/3.x/esri/css/esri.css'; // esri.css路径
 
     onMapReady($event: ENgxEsriMapComponent) {
         this.esriMap = $event;
@@ -78,9 +78,9 @@
 
 - `geoUrl`（`string?='http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer'`） - 几何服务路径，默认是在线路径，最好配置自己的路径
 
-- `gisApiUrl`（`string?='http://js.arcgis.com/3.14/'`） - arcgis javascript API路径，默认是在线路径，最好配置自己的路径
+- `gisApiUrl`（`string?='http://js.arcgis.com/3.23/'`） - arcgis javascript API路径，默认是在线路径，最好配置自己的路径
 
-- `esriCSSUrl`（`string?='http://js.arcgis.com/3.14/esri/css/esri.css'`） - esri.css路径，默认是在线路径，最好配置自己的路径
+- `esriCSSUrl`（`string?='http://js.arcgis.com/3.23/esri/css/esri.css'`） - esri.css路径，默认是在线路径，最好配置自己的路径
 
 - `initExtent`（`Object`） - 初始地图范围，`{xmax, xmin, ymax, ymin}`
 
