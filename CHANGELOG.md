@@ -1,3 +1,7 @@
+# 2.0.0（2017-12-19）
+
+- ArcGIS API for JavaScript 升级到v3.23
+
 # 1.2.0（2017-12-13）
 
 - 将essence-ng2-esrimap更名为e-ngx-esrimap

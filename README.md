@@ -1,6 +1,6 @@
 # e-ngx-esrimap
 
-基于Angular的二维地图组件，使用的地图API是ArcGIS API for JavaScript v3.14。
+基于Angular的二维地图组件，使用的地图API是ArcGIS API for JavaScript v3.23。
 
 ## Usage
 
