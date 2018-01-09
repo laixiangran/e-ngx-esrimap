@@ -28,6 +28,5 @@ export class AppComponent implements OnInit {
 	onMapReady($event: ENgxEsriMapComponent) {
 		this.esriMap = $event;
 		this.map = this.esriMap.map;
-		// this.esriMap.map.setZoom(3);
 	}
 }
