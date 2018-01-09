@@ -9,9 +9,10 @@ import { ENgxEsriMapComponent } from '../../src/e-ngx-esrimap.component';
 })
 export class AppComponent implements OnInit {
 	esriMap: ENgxEsriMapComponent;
-	mapUrl: string = environment.mapUrl; // 底图路径
-	geoUrl: string = environment.geoUrl; // 几何服务路径
-	gisApiUrl: string = environment.gisApiUrl; // arcgis javascript API路径
+	map: any;
+	mapUrl: string = environment.mapUrl;
+	geoUrl: string = environment.geoUrl;
+	gisApiUrl: string = environment.gisApiUrl;
 	esriCSSUrl: string = environment.esriCSSUrl;
 
 	constructor() {
@@ -26,5 +27,7 @@ export class AppComponent implements OnInit {
 	 */
 	onMapReady($event: ENgxEsriMapComponent) {
 		this.esriMap = $event;
+		this.map = this.esriMap.map;
+		// this.esriMap.map.setZoom(3);
 	}
 }

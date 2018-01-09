@@ -1,13 +1,23 @@
 <div class="app_main">
 	<h1>esrimap Component for Angular</h1>
 	<div style="height: 600px;">
+		<h2>ArcGIS地图服务</h2>
 		<e-ngx-esrimap
 				[isProxy]="false"
 				[mapUrl]="mapUrl"
 				[gisApiUrl]="gisApiUrl"
 				[geoUrl]="geoUrl"
 				[esriCSSUrl]="esriCSSUrl"
+				[initExtent]="{xmax: 116.456, xmin: 116.123, ymax: 40.014256, ymin: 39.898562}"
 				(mapReady)="onMapReady($event)">
 		</e-ngx-esrimap>
+		<h2>天地图地图服务</h2>
+		<e-ngx-esrimap
+				[mapType]="'tdt'"
+				[mapUrl]="['vec','cva']"
+				[initExtent]="{xmax: 116.456, xmin: 116.123, ymax: 40.014256, ymin: 39.898562}"
+				(mapReady)="onMapReady($event)">
+		</e-ngx-esrimap>
+		<br>
 	</div>
 </div>

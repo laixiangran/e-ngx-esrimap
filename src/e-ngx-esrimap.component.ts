@@ -53,7 +53,7 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 	@Input() proxyUrl: string = 'proxy.jsp';
 
 	// 底图路径
-	@Input() mapUrl: string[] | string;
+	@Input() mapUrl: string[] | string = 'http://server.arcgisonline.com/ArcGIS/rest/services/ESRI_StreetMap_World_2D/MapServer';
 
 	// 几何服务路径
 	@Input() geoUrl: string = 'http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer';
@@ -309,11 +309,13 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 		this.map.on('load', () => {
 			if (this.initExtent) {
 				this.initExtent.spatialReference = this.map.spatialReference;
-				this.map.setExtent(new this.Extent(this.initExtent));
+				this.map.setExtent(new this.Extent(this.initExtent)).then(() => {
+					this.mapReady.emit(this);
+				});
 			} else {
 				this.initExtent = this.map.extent;
+				this.mapReady.emit(this);
 			}
-			this.mapReady.emit(this);
 		});
 
 		this.map.on('extent-change', (event) => {

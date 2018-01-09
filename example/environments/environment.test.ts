@@ -7,8 +7,8 @@
 export const environment = {
 	production: true,
 	serverHost: '/',
-	mapUrl: 'http://192.168.0.181:6080/arcgis/rest/services/HD_BASEMAP/MapServer',
-	geoUrl: 'http://192.168.0.181:6080/arcgis/rest/services/Utilities/Geometry/GeometryServer',
-	gisApiUrl: 'http://192.168.0.8/arcgis_api/3.x/init.js',
-	esriCSSUrl: 'http://192.168.0.8/arcgis_api/3.x/esri/css/esri.css'
+	mapUrl: 'http://server.arcgisonline.com/ArcGIS/rest/services/ESRI_StreetMap_World_2D/MapServer',
+	geoUrl: 'https://utility.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer',
+	gisApiUrl: 'http://js.arcgis.com/3.23/',
+	esriCSSUrl: 'http://js.arcgis.com/3.23/esri/css/esri.css'
 };

@@ -32,13 +32,21 @@
 4. Use in the template
 
 	```html
+    <h2>ArcGIS地图服务</h2>
     <e-ngx-esrimap
+            [isProxy]="false"
+            [mapUrl]="mapUrl"
             [gisApiUrl]="gisApiUrl"
             [geoUrl]="geoUrl"
-            [mapUrl]="mapUrl"
             [esriCSSUrl]="esriCSSUrl"
-            (mapReady)="onMapReady($event)"
-            (exentChange)="onExentChange($event)">
+            (mapReady)="onMapReady($event)">
+    </e-ngx-esrimap>
+    <h2>天地图地图服务</h2>
+    <e-ngx-esrimap
+            [mapType]="'tdt'"
+            [mapUrl]="['vec','cva']"
+            [initExtent]="{xmax: 116.456, xmin: 116.123, ymax: 40.014256, ymin: 39.898562}"
+            (mapReady)="onMapReady($event)">
     </e-ngx-esrimap>
 	```
 
@@ -46,17 +54,15 @@
 
 	```typescript
     esriMap: ENgxEsriMapComponent;
-    mapUrl: string = 'http://192.168.0.109:8399/arcgis/rest/services/HD_BASEMAP/MapServer';
-    geoUrl: string = 'http://192.168.0.109:8399/arcgis/rest/services/Geometry/GeometryServer';
-    gisApiUrl: string = 'http://192.168.0.8/arcgis_api/3.x/init.js';
-    esriCSSUrl: string = 'http://192.168.0.8/arcgis_api/3.x/esri/css/esri.css'; // esri.css路径
+    map: any;
+    mapUrl: string = 'http://server.arcgisonline.com/ArcGIS/rest/services/ESRI_StreetMap_World_2D/MapServer';
+    geoUrl: string = 'http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer';
+    gisApiUrl: string = 'http://js.arcgis.com/3.23/';
+    esriCSSUrl: string = 'http://js.arcgis.com/3.23/esri/css/esri.css';
 
     onMapReady($event: ENgxEsriMapComponent) {
         this.esriMap = $event;
-    }
-
-    onExentChange(event: any) {
-        console.log(event);
+        this.map = this.esriMap.map;
     }
 	```
 
@@ -72,7 +78,7 @@
 
 - `proxyUrl`（`string?='proxy.jsp'`） - 代理页面的路径
 
-- `mapUrl`（`string[] | string`） - 基础底图路径，如`mapType='tdt'`，则mapUrl可从这四种地图类型`vec（矢量图层）, cva（矢量标注）, img（影像图层）, cia（影像标注）`通过数组形式组合使用。mapType='esri'，则mapUrl是完整的ArcGIS切片地图服务路径
+- `mapUrl`（`string[] | string='http://server.arcgisonline.com/ArcGIS/rest/services/ESRI_StreetMap_World_2D/MapServer'`） - 基础底图路径，如`mapType='tdt'`，则mapUrl可从这四种地图类型`vec（矢量图层）, cva（矢量标注）, img（影像图层）, cia（影像标注）`通过数组形式组合使用。mapType='esri'，则mapUrl是完整的ArcGIS切片地图服务路径
 
 - `mapType`（`string?='esri'`） - 基础底图类型，`tdt`：天地图，`esri`：esri地图服务
 
