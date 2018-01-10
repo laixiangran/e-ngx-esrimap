@@ -70,6 +70,9 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 	// 地图初始范围
 	@Input() initExtent: any;
 
+	// 是否启用导航
+	@Input() enableNavigation: boolean = true;
+
 	// 地图初始化完成之后触发该事件
 	@Output()
 	mapReady: EventEmitter<any> = new EventEmitter<any>(false);

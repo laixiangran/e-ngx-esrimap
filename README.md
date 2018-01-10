@@ -90,6 +90,8 @@
 
 - `initExtent`（`Object`） - 初始地图范围，`{xmax, xmin, ymax, ymin}`
 
+- `enableNavigation`（`boolean?=true`） - 是否启用导航部件
+
 ### Outputs
 
 - `mapReady`：地图初始化完成后会触发该事件，参数$event为当前component实例对象

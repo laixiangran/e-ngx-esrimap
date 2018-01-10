@@ -1,6 +1,6 @@
 <div class="e-ngx-map" #eNgxMap>
 	<div class="eMap" #emap></div>
-	<div class="eScaleBox">
+	<div class="eNavigation" *ngIf="enableNavigation">
 		<div class="zoom-map full-map" title="全图" (click)="fullMap()">
 			<i class="fa fa-globe" aria-hidden="true"></i>
 		</div>
