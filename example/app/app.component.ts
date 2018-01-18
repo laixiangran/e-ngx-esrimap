@@ -8,8 +8,10 @@ import { ENgxEsriMapComponent } from '../../src/e-ngx-esrimap.component';
 	styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-	esriMap: ENgxEsriMapComponent;
-	map: any;
+	esriMapComponent: ENgxEsriMapComponent;
+	esriMap: any;
+	tdtMapComponent: ENgxEsriMapComponent;
+	tdtMap: any;
 	mapUrl: string = environment.mapUrl;
 	geoUrl: string = environment.geoUrl;
 	gisApiUrl: string = environment.gisApiUrl;
@@ -22,11 +24,20 @@ export class AppComponent implements OnInit {
 	}
 
 	/**
-	 * 地图加载完成
+	 * esri地图加载完成
 	 * @param $event
 	 */
-	onMapReady($event: ENgxEsriMapComponent) {
-		this.esriMap = $event;
-		this.map = this.esriMap.map;
+	onEsriMapReady($event: ENgxEsriMapComponent) {
+		this.esriMapComponent = $event;
+		this.esriMap = this.esriMapComponent.map;
+	}
+
+	/**
+	 * 天地图地图加载完成
+	 * @param $event
+	 */
+	onTdtMapReady($event: ENgxEsriMapComponent) {
+		this.tdtMapComponent = $event;
+		this.tdtMap = this.tdtMapComponent.map;
 	}
 }
