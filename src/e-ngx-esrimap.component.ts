@@ -1,9 +1,8 @@
 import { Component, OnInit, ElementRef, ViewChild, Output, EventEmitter, Input, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscriber } from 'rxjs/Subscriber';
-
-import { AsyncGetResultParam } from './models/AsyncGetResultParam';
 import { ENgxEsriMapLoaderService } from './e-ngx-esrimap-loader.service';
+import { AsyncGetResultParam } from './models/AsyncGetResultParam';
 
 @Component({
 	selector: 'e-ngx-esrimap',
@@ -12,36 +11,56 @@ import { ENgxEsriMapLoaderService } from './e-ngx-esrimap-loader.service';
 })
 export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 
-	// esri modules
+	private timeOutId: number; // 定时器id
+	private locationLayer: any; // 定位图层
+
+	// esri
 	Map: any;
-	Extent: any;
 	Color: any;
-	TileInfo: any;
-	Geoprocessor: any;
-	ArcGISTiledMapServiceLayer: any;
-	GraphicsLayer: any;
-	Point: any;
-	PictureMarkerSymbol: any;
 	Graphic: any;
-	ImageParameters: any;
-	ProjectParameters: any;
 	SpatialReference: any;
-	geometryService: any;
+	urlUtils: any;
+	esriConfig: any;
+
+	// esri/tasks
+	Geoprocessor: any;
 	GeometryService: any;
 	FeatureSet: any;
-	SimpleMarkerSymbol: any;
-	SimpleLineSymbol: any;
-	SimpleFillSymbol: any;
+	FindTask: any;
+	FindParameters: any;
 	IdentifyTask: any;
 	IdentifyParameters: any;
 	QueryTask: any;
 	Query: any;
+	ProjectParameters: any;
 	BufferParameters: any;
 
-	// map
-	map: any;
-	private timeOutId: number;
-	private locationLayer: any; // 定位图层
+	// esri/layers
+	ArcGISTiledMapServiceLayer: any;
+	ArcGISDynamicMapServiceLayer: any;
+	WebTiledLayer: any;
+	GraphicsLayer: any;
+	ImageParameters: any;
+	TileInfo: any;
+
+	// esri/geometry
+	Extent: any;
+	Point: any;
+	ScreenPoint: any;
+	Polyline: any;
+	Polygon: any;
+
+	// esri/symbols
+	PictureMarkerSymbol: any;
+	SimpleMarkerSymbol: any;
+	SimpleLineSymbol: any;
+	CartographicLineSymbol: any;
+	PictureFillSymbol: any;
+	SimpleFillSymbol: any;
+
+	// ENgxEsriMapComponent
+	map: any; // 当前地图实例
+	geometryService: any; // 当前几何服务实例
 	isMax: boolean = false; // 比例是否最大
 	isMin: boolean = false; // 比例是否最小
 
@@ -86,10 +105,10 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 	ngOnInit() {
 		this.addEsriMapCss();
 		this.esriLoaderService.load({url: this.gisApiUrl}).then(() => {
-			this.initMap();
+			this.init();
 		}).catch((e: Error) => {
 			if (e.message === 'The ArcGIS API for JavaScript is already loaded.') {
-				this.initMap();
+				this.init();
 			} else {
 				console.error(e);
 			}
@@ -100,9 +119,9 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 	}
 
 	/**
-	 * 初始化地图
+	 * 初始化esri模块
 	 */
-	private initMap(): void {
+	private init(): void {
 		this.loadEsriModules([
 			'esri/map',
 			'esri/urlUtils',
@@ -114,6 +133,8 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 			'esri/tasks/ProjectParameters',
 			'esri/tasks/GeometryService',
 			'esri/tasks/FeatureSet',
+			'esri/tasks/FindTask',
+			'esri/tasks/FindParameters',
 			'esri/tasks/IdentifyTask',
 			'esri/tasks/IdentifyParameters',
 			'esri/tasks/QueryTask',
@@ -122,110 +143,139 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 			'esri/layers/ArcGISTiledMapServiceLayer',
 			'esri/layers/GraphicsLayer',
 			'esri/layers/ImageParameters',
+			'esri/layers/TileInfo',
+			'esri/layers/WebTiledLayer',
+			'esri/layers/ArcGISDynamicMapServiceLayer',
 			'esri/geometry/Point',
+			'esri/geometry/ScreenPoint',
 			'esri/geometry/Extent',
+			'esri/geometry/Polyline',
+			'esri/geometry/Polygon',
 			'esri/symbols/PictureMarkerSymbol',
 			'esri/symbols/SimpleMarkerSymbol',
 			'esri/symbols/SimpleLineSymbol',
+			'esri/symbols/CartographicLineSymbol',
+			'esri/symbols/PictureFillSymbol',
 			'esri/symbols/SimpleFillSymbol'
-		]).then(([
-			Map,
-			urlUtils,
-			esriConfig,
-			Graphic,
-		 	Color,
-			SpatialReference,
-			Geoprocessor,
-			ProjectParameters,
-			GeometryService,
-			FeatureSet,
-			IdentifyTask,
-			IdentifyParameters,
-		 	QueryTask,
-			Query,
-			BufferParameters,
-			ArcGISTiledMapServiceLayer,
-			GraphicsLayer,
-			ImageParameters,
-			Point,
-			Extent,
-			PictureMarkerSymbol,
-			SimpleMarkerSymbol,
-			SimpleLineSymbol,
-			SimpleFillSymbol]) => {
+		]).then((
+			[
+				Map,
+				urlUtils,
+				esriConfig,
+				Graphic,
+				Color,
+				SpatialReference,
+				Geoprocessor,
+				ProjectParameters,
+				GeometryService,
+				FeatureSet,
+				FindTask,
+				FindParameters,
+				IdentifyTask,
+				IdentifyParameters,
+				QueryTask,
+				Query,
+				BufferParameters,
+				ArcGISTiledMapServiceLayer,
+				GraphicsLayer,
+				ImageParameters,
+				TileInfo,
+				WebTiledLayer,
+				ArcGISDynamicMapServiceLayer,
+				Point,
+				ScreenPoint,
+				Extent,
+				Polyline,
+				Polygon,
+				PictureMarkerSymbol,
+				SimpleMarkerSymbol,
+				SimpleLineSymbol,
+				CartographicLineSymbol,
+				PictureFillSymbol,
+				SimpleFillSymbol
+			]) => {
 
 			// 初始化模块
 			this.Map = Map;
-			this.Extent = Extent;
+			this.urlUtils = urlUtils;
+			this.esriConfig = esriConfig;
+			this.Graphic = Graphic;
 			this.Color = Color;
+			this.SpatialReference = SpatialReference;
 			this.Geoprocessor = Geoprocessor;
 			this.ProjectParameters = ProjectParameters;
 			this.GeometryService = GeometryService;
+			this.FeatureSet = FeatureSet;
+			this.FindTask = FindTask;
+			this.FindParameters = FindParameters;
+			this.IdentifyTask = IdentifyTask;
+			this.IdentifyParameters = IdentifyParameters;
+			this.QueryTask = QueryTask;
+			this.Query = Query;
+			this.BufferParameters = BufferParameters;
 			this.ArcGISTiledMapServiceLayer = ArcGISTiledMapServiceLayer;
 			this.GraphicsLayer = GraphicsLayer;
 			this.ImageParameters = ImageParameters;
+			this.TileInfo = TileInfo;
+			this.WebTiledLayer = WebTiledLayer;
+			this.ArcGISDynamicMapServiceLayer = ArcGISDynamicMapServiceLayer;
 			this.Point = Point;
+			this.ScreenPoint = ScreenPoint;
+			this.Extent = Extent;
+			this.Polyline = Polyline;
+			this.Polygon = Polygon;
 			this.PictureMarkerSymbol = PictureMarkerSymbol;
-			this.Graphic = Graphic;
-			this.SpatialReference = SpatialReference;
-			this.FeatureSet = FeatureSet;
-			this.IdentifyTask = IdentifyTask;
-			this.IdentifyParameters = IdentifyParameters;
-			this.Query = Query;
-			this.QueryTask = QueryTask;
-			this.BufferParameters = BufferParameters;
 			this.SimpleMarkerSymbol = SimpleMarkerSymbol;
 			this.SimpleLineSymbol = SimpleLineSymbol;
+			this.CartographicLineSymbol = CartographicLineSymbol;
+			this.PictureFillSymbol = PictureFillSymbol;
 			this.SimpleFillSymbol = SimpleFillSymbol;
 
-			// 初始化几何服务
-			if (this.geoUrl) {
-				this.geometryService = new this.GeometryService(this.geoUrl);
-			} else {
-				throw new Error('geoUrl未配置，将导致坐标转换等功能无法使用！');
-			}
-
-			// 设置代理
-			if (this.isProxy) {
-				esriConfig.defaults.io.proxyUrl = this.proxyUrl;
-				esriConfig.defaults.io.alwaysUseProxy = true;
-				urlUtils.addProxyRule({
-					urlPrefix: 'route.arcgis.com',
-					proxyUrl: this.proxyUrl
-				});
-			}
-
-			// 初始化地图
-			this.map = new Map(this.emapEle.nativeElement, {
-				logo: false,
-				slider: false
-			});
-
-			// 加载底图
-			if (this.mapType === 'tdt') {
-				this.getTdtLayer(Array.isArray(this.mapUrl) ? this.mapUrl : [this.mapUrl]).then((layers: any[]) => {
-					layers.forEach((layer: any) => {
-						this.map.addLayer(layer);
-					});
-				});
-			} else if (this.mapType === 'esri') {
-				this.map.addLayer(new this.ArcGISTiledMapServiceLayer(this.mapUrl));
-			} else {
-				throw new Error('请指定输入属性 mapType 的值！');
-			}
-
-			// 注册地图相关事件
+			this.initMap();
 			this.addMapEvent();
 		});
 	}
 
 	/**
-	 * 加载arcgis api for javascript的模块
-	 * @param modules
-	 * @returns {Promise<any>}
+	 * 初始化地图
 	 */
-	loadEsriModules(modules: string[]): Promise<any> {
-		return this.esriLoaderService.loadModules(modules);
+	private initMap(): void {
+
+		// 初始化几何服务
+		if (this.geoUrl) {
+			this.geometryService = new this.GeometryService(this.geoUrl);
+		} else {
+			throw new Error('geoUrl未配置，将导致坐标转换等功能无法使用！');
+		}
+
+		// 设置代理
+		if (this.isProxy) {
+			this.esriConfig.defaults.io.proxyUrl = this.proxyUrl;
+			this.esriConfig.defaults.io.alwaysUseProxy = true;
+			this.urlUtils.addProxyRule({
+				urlPrefix: 'route.arcgis.com',
+				proxyUrl: this.proxyUrl
+			});
+		}
+
+		// 初始化地图
+		this.map = new this.Map(this.emapEle.nativeElement, {
+			logo: false,
+			slider: false
+		});
+
+		// 加载底图
+		if (this.mapType === 'tdt') {
+			this.getTdtLayer(Array.isArray(this.mapUrl) ? this.mapUrl : [this.mapUrl]).then((layers: any[]) => {
+				layers.forEach((layer: any) => {
+					this.map.addLayer(layer);
+				});
+			});
+		} else if (this.mapType === 'esri') {
+			this.map.addLayer(new this.ArcGISTiledMapServiceLayer(this.mapUrl));
+		} else {
+			throw new Error('请指定输入属性 mapType 的值！');
+		}
 	}
 
 	/**
@@ -239,70 +289,52 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 				'esri/layers/TileInfo',
 				'esri/layers/WebTiledLayer'])
 				.then(([TileInfo, WebTiledLayer]) => {
-					this.TileInfo = TileInfo;
-					const tileInfo: any = new TileInfo({
-						rows: 256,
-						cols: 256,
-						compressionQuality: 0,
-						origin: {
-							x: -180,
-							y: 90
-						},
-						spatialReference: {
-							wkid: 4326
-						},
-						lods: [
-							{'level': 2, 'resolution': 0.3515625, 'scale': 147748796.52937502},
-							{'level': 3, 'resolution': 0.17578125, 'scale': 73874398.264687508},
-							{'level': 4, 'resolution': 0.087890625, 'scale': 36937199.132343754},
-							{'level': 5, 'resolution': 0.0439453125, 'scale': 18468599.566171877},
-							{'level': 6, 'resolution': 0.02197265625, 'scale': 9234299.7830859385},
-							{'level': 7, 'resolution': 0.010986328125, 'scale': 4617149.8915429693},
-							{'level': 8, 'resolution': 0.0054931640625, 'scale': 2308574.9457714846},
-							{'level': 9, 'resolution': 0.00274658203125, 'scale': 1154287.4728857423},
-							{'level': 10, 'resolution': 0.001373291015625, 'scale': 577143.73644287116},
-							{'level': 11, 'resolution': 0.0006866455078125, 'scale': 288571.86822143558},
-							{'level': 12, 'resolution': 0.00034332275390625, 'scale': 144285.93411071779},
-							{'level': 13, 'resolution': 0.000171661376953125, 'scale': 72142.967055358895},
-							{'level': 14, 'resolution': 8.58306884765625e-005, 'scale': 36071.483527679447},
-							{'level': 15, 'resolution': 4.291534423828125e-005, 'scale': 18035.741763839724},
-							{'level': 16, 'resolution': 2.1457672119140625e-005, 'scale': 9017.8708819198619},
-							{'level': 17, 'resolution': 1.0728836059570313e-005, 'scale': 4508.9354409599309},
-							{'level': 18, 'resolution': 5.3644180297851563e-006, 'scale': 2254.4677204799655}
-						]
-					});
-					const subDomains: string[] = ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7'];
-					const tdtLayers: any[] = [];
-					layers.forEach((type) => {
-						const templateUrl: string = 'http://${subDomain}.tianditu.com/DataServer?T=' + type + '_c&X=${col}&Y=${row}&L=${level}';
-						const tdtLayer: any = new WebTiledLayer(templateUrl, {
-							id: 'tdt_' + type,
-							subDomains: subDomains,
-							tileInfo: tileInfo
-						});
-						tdtLayers.push(tdtLayer);
-					});
-					resolve(tdtLayers);
+
 				});
+			const tileInfo: any = new this.TileInfo({
+				rows: 256,
+				cols: 256,
+				compressionQuality: 0,
+				origin: {
+					x: -180,
+					y: 90
+				},
+				spatialReference: {
+					wkid: 4326
+				},
+				lods: [
+					{'level': 2, 'resolution': 0.3515625, 'scale': 147748796.52937502},
+					{'level': 3, 'resolution': 0.17578125, 'scale': 73874398.264687508},
+					{'level': 4, 'resolution': 0.087890625, 'scale': 36937199.132343754},
+					{'level': 5, 'resolution': 0.0439453125, 'scale': 18468599.566171877},
+					{'level': 6, 'resolution': 0.02197265625, 'scale': 9234299.7830859385},
+					{'level': 7, 'resolution': 0.010986328125, 'scale': 4617149.8915429693},
+					{'level': 8, 'resolution': 0.0054931640625, 'scale': 2308574.9457714846},
+					{'level': 9, 'resolution': 0.00274658203125, 'scale': 1154287.4728857423},
+					{'level': 10, 'resolution': 0.001373291015625, 'scale': 577143.73644287116},
+					{'level': 11, 'resolution': 0.0006866455078125, 'scale': 288571.86822143558},
+					{'level': 12, 'resolution': 0.00034332275390625, 'scale': 144285.93411071779},
+					{'level': 13, 'resolution': 0.000171661376953125, 'scale': 72142.967055358895},
+					{'level': 14, 'resolution': 8.58306884765625e-005, 'scale': 36071.483527679447},
+					{'level': 15, 'resolution': 4.291534423828125e-005, 'scale': 18035.741763839724},
+					{'level': 16, 'resolution': 2.1457672119140625e-005, 'scale': 9017.8708819198619},
+					{'level': 17, 'resolution': 1.0728836059570313e-005, 'scale': 4508.9354409599309},
+					{'level': 18, 'resolution': 5.3644180297851563e-006, 'scale': 2254.4677204799655}
+				]
+			});
+			const subDomains: string[] = ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7'];
+			const tdtLayers: any[] = [];
+			layers.forEach((type) => {
+				const templateUrl: string = 'http://${subDomain}.tianditu.com/DataServer?T=' + type + '_c&X=${col}&Y=${row}&L=${level}';
+				const tdtLayer: any = new this.WebTiledLayer(templateUrl, {
+					id: 'tdt_' + type,
+					subDomains: subDomains,
+					tileInfo: tileInfo
+				});
+				tdtLayers.push(tdtLayer);
+			});
+			resolve(tdtLayers);
 		});
-	}
-
-	zoomIn() {
-		this.isMax = this.map.getZoom() >= this.map.getMaxZoom();
-		if (!this.isMax) {
-			this.map.setZoom(this.map.getZoom() + 1);
-		}
-	}
-
-	zoomOut() {
-		this.isMin = this.map.getZoom() <= this.map.getMinZoom();
-		if (!this.isMin) {
-			this.map.setZoom(this.map.getZoom() - 1);
-		}
-	}
-
-	fullMap() {
-		this.map.setExtent(new this.Extent(this.initExtent));
 	}
 
 	/**
@@ -326,6 +358,57 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 			this.isMin = this.map.getZoom() <= this.map.getMinZoom();
 			this.exentChange.emit(event);
 		});
+	}
+
+	/**
+	 * 动态添加esri.css
+	 */
+	private addEsriMapCss(): void {
+		const linkId: string = 'esriCss';
+		if (!document.getElementById(linkId)) {
+			const head = document.getElementsByTagName('head')[0],
+				link = document.createElement('link');
+			link.id = linkId;
+			link.rel = 'stylesheet';
+			link.href = this.esriCSSUrl;
+			head.appendChild(link);
+		}
+	}
+
+	/**
+	 * 加载arcgis api for javascript的模块
+	 * @param modules
+	 * @returns {Promise<any>}
+	 */
+	loadEsriModules(modules: string[]): Promise<any> {
+		return this.esriLoaderService.loadModules(modules);
+	}
+
+	/**
+	 * 放大
+	 */
+	zoomIn() {
+		this.isMax = this.map.getZoom() >= this.map.getMaxZoom();
+		if (!this.isMax) {
+			this.map.setZoom(this.map.getZoom() + 1);
+		}
+	}
+
+	/**
+	 * 缩小
+	 */
+	zoomOut() {
+		this.isMin = this.map.getZoom() <= this.map.getMinZoom();
+		if (!this.isMin) {
+			this.map.setZoom(this.map.getZoom() - 1);
+		}
+	}
+
+	/**
+	 * 全图
+	 */
+	fullMap() {
+		this.map.setExtent(new this.Extent(this.initExtent));
 	}
 
 	/**
@@ -516,19 +599,4 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 
 		return d[0] + '°' + f[0] + '′' + (Number('0.' + f[1]) * 60).toFixed(2) + '″';
 	};
-
-	/**
-	 * 动态添加esri.css
-	 */
-	private addEsriMapCss(): void {
-		const linkId: string = 'esriCss';
-		if (!document.getElementById(linkId)) {
-			const head = document.getElementsByTagName('head')[0],
-				link = document.createElement('link');
-			link.id = linkId;
-			link.rel = 'stylesheet';
-			link.href = this.esriCSSUrl;
-			head.appendChild(link);
-		}
-	}
 }
