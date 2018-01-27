@@ -58,6 +58,9 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 	PictureFillSymbol: any;
 	SimpleFillSymbol: any;
 
+	// toolbar
+	Draw: any;
+
 	// ENgxEsriMapComponent
 	map: any; // 当前地图实例
 	geometryService: any; // 当前几何服务实例
@@ -156,7 +159,8 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 			'esri/symbols/SimpleLineSymbol',
 			'esri/symbols/CartographicLineSymbol',
 			'esri/symbols/PictureFillSymbol',
-			'esri/symbols/SimpleFillSymbol'
+			'esri/symbols/SimpleFillSymbol',
+			'esri/toolbars/draw'
 		]).then((
 			[
 				Map,
@@ -192,7 +196,8 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 				SimpleLineSymbol,
 				CartographicLineSymbol,
 				PictureFillSymbol,
-				SimpleFillSymbol
+				SimpleFillSymbol,
+				Draw
 			]) => {
 
 			// 初始化模块
@@ -230,6 +235,7 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 			this.CartographicLineSymbol = CartographicLineSymbol;
 			this.PictureFillSymbol = PictureFillSymbol;
 			this.SimpleFillSymbol = SimpleFillSymbol;
+			this.Draw = Draw;
 
 			this.initMap();
 			this.addMapEvent();
