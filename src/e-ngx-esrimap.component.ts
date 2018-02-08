@@ -350,7 +350,7 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 		this.map.on('load', () => {
 			if (this.initExtent) {
 				this.initExtent.spatialReference = this.map.spatialReference;
-				this.map.setExtent(new this.Extent(this.initExtent)).then(() => {
+				this.map.setExtent(new this.Extent(this.initExtent), true).then(() => {
 					this.mapReady.emit(this);
 				});
 			} else {
@@ -414,7 +414,7 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 	 * 全图
 	 */
 	fullMap() {
-		this.map.setExtent(new this.Extent(this.initExtent));
+		this.map.setExtent(new this.Extent(this.initExtent), true);
 	}
 
 	/**
