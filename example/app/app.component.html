@@ -2,9 +2,14 @@
 	<h1>esrimap Component for Angular</h1>
 	<div style="height: 600px;">
 		<h2>天地图地图服务</h2>
+		<button (click)="tdtMapComponent.changeBaseLayer(0)">切换底图1</button>
+		<button (click)="tdtMapComponent.changeBaseLayer(1)">切换底图2</button>
+		<button (click)="tdtMapComponent.changeBaseLayer(2)">切换底图3</button>
+		<hr>
 		<e-ngx-esrimap
 				[mapType]="'tdt'"
 				[mapUrl]="['vec','cva']"
+				[submapUrl]="[['img','cia'], ['ter','cta']]"
 				[gisApiUrl]="gisApiUrl"
 				[geoUrl]="geoUrl"
 				[esriCSSUrl]="esriCSSUrl"
@@ -12,15 +17,19 @@
 				(mapReady)="onTdtMapReady($event)">
 		</e-ngx-esrimap>
 		<h2>ArcGIS地图服务</h2>
+		<button (click)="esriMapComponent.changeBaseLayer(0)">切换底图1</button>
+		<button (click)="esriMapComponent.changeBaseLayer(1)">切换底图2</button>
+		<hr>
 		<e-ngx-esrimap
-		[isProxy]="false"
-		[mapUrl]="mapUrl"
-		[enableNavigation]="false"
-		[gisApiUrl]="gisApiUrl"
-		[geoUrl]="geoUrl"
-		[esriCSSUrl]="esriCSSUrl"
-		[initExtent]="{xmax: 116.39029888900006, xmin: 116.04209077900009, ymax: 40.161018230000025, ymin: 39.885287565000056}"
-		(mapReady)="onEsriMapReady($event)">
+			[isProxy]="false"
+			[mapUrl]="mapUrl"
+			[submapUrl]="['http://server.arcgisonline.com/arcgis/rest/services/ESRI_Imagery_World_2D/MapServer']"
+			[enableNavigation]="false"
+			[gisApiUrl]="gisApiUrl"
+			[geoUrl]="geoUrl"
+			[esriCSSUrl]="esriCSSUrl"
+			[initExtent]="{xmax: 116.39029888900006, xmin: 116.04209077900009, ymax: 40.161018230000025, ymin: 39.885287565000056}"
+			(mapReady)="onEsriMapReady($event)">
 		</e-ngx-esrimap>
 		<br>
 	</div>

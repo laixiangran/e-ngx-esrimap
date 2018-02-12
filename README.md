@@ -34,19 +34,26 @@
 	```html
     <h2>ArcGIS地图服务</h2>
     <e-ngx-esrimap
-            [isProxy]="false"
-            [mapUrl]="mapUrl"
-            [gisApiUrl]="gisApiUrl"
-            [geoUrl]="geoUrl"
-            [esriCSSUrl]="esriCSSUrl"
-            (mapReady)="onMapReady($event)">
+        [isProxy]="false"
+        [mapUrl]="mapUrl"
+        [submapUrl]="[mapUrl, mapUrl]"
+        [enableNavigation]="false"
+        [gisApiUrl]="gisApiUrl"
+        [geoUrl]="geoUrl"
+        [esriCSSUrl]="esriCSSUrl"
+        [initExtent]="{xmax: 116.39029888900006, xmin: 116.04209077900009, ymax: 40.161018230000025, ymin: 39.885287565000056}"
+        (mapReady)="onEsriMapReady($event)">
     </e-ngx-esrimap>
     <h2>天地图地图服务</h2>
     <e-ngx-esrimap
             [mapType]="'tdt'"
             [mapUrl]="['vec','cva']"
-            [initExtent]="{xmax: 116.456, xmin: 116.123, ymax: 40.014256, ymin: 39.898562}"
-            (mapReady)="onMapReady($event)">
+            [submapUrl]="[['img','cia'], ['ter','cta']]"
+            [gisApiUrl]="gisApiUrl"
+            [geoUrl]="geoUrl"
+            [esriCSSUrl]="esriCSSUrl"
+            [initExtent]="{xmax: 116.39029888900006, xmin: 116.04209077900009, ymax: 40.161018230000025, ymin: 39.885287565000056}"
+            (mapReady)="onTdtMapReady($event)">
     </e-ngx-esrimap>
 	```
 
@@ -80,6 +87,8 @@
 
 - `mapUrl`（`string[] | string='http://server.arcgisonline.com/ArcGIS/rest/services/ESRI_StreetMap_World_2D/MapServer'`） - 基础底图路径，如`mapType='tdt'`，则mapUrl可从这四种地图类型`vec（矢量图层）, cva（矢量标注）, img（影像图层）, cia（影像标注）`通过数组形式组合使用。mapType='esri'，则mapUrl是完整的ArcGIS切片地图服务路径
 
+- `submapUrl`（`any[]`）- 其它切换的底图路径，如`mapType='tdt'`，则submapUrl可从这四种地图类型`vec（矢量图层）, cva（矢量标注）, img（影像图层）, cia（影像标注）`通过数组形式组合使用。mapType='esri'，则submapUrl是完整的ArcGIS切片地图服务路径的数组
+
 - `mapType`（`string?='esri'`） - 基础底图类型，`tdt`：天地图，`esri`：esri地图服务
 
 - `geoUrl`（`string?='http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer'`） - 几何服务路径，默认是在线路径，最好配置自己的路径
@@ -103,6 +112,8 @@
 - `map`（`any`） - 当前地图对象
 
 ### Instance Methods
+
+- `changeBaseLayer (layerIndex: number): void` - 底图切换，index是所有待切换底图的序号。mapUrl对应序号为0，其它图层序号根据submapUrl的数组序号加1得到
 
 - `loadEsriModules(modules: string[]): Promise<any>` - 加载ArcGIS API for JavaScript的模块，如：`['esri/map']`
 

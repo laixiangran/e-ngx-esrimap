@@ -13,6 +13,7 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 
 	private timeOutId: number; // 定时器id
 	private locationLayer: any; // 定位图层
+	private basemapIds: any[] = []; // 所有底图id
 
 	// esri
 	Map: any;
@@ -76,6 +77,9 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 
 	// 底图路径
 	@Input() mapUrl: string[] | string = 'http://server.arcgisonline.com/ArcGIS/rest/services/ESRI_StreetMap_World_2D/MapServer';
+
+	// 副底图路径，用作底图切换
+	@Input() submapUrl: any[] = ['http://server.arcgisonline.com/arcgis/rest/services/ESRI_Imagery_World_2D/MapServer'];
 
 	// 几何服务路径
 	@Input() geoUrl: string = 'http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer';
@@ -161,44 +165,43 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 			'esri/symbols/PictureFillSymbol',
 			'esri/symbols/SimpleFillSymbol',
 			'esri/toolbars/draw'
-		]).then((
-			[
-				Map,
-				urlUtils,
-				esriConfig,
-				Graphic,
-				Color,
-				SpatialReference,
-				Geoprocessor,
-				ProjectParameters,
-				GeometryService,
-				FeatureSet,
-				FindTask,
-				FindParameters,
-				IdentifyTask,
-				IdentifyParameters,
-				QueryTask,
-				Query,
-				BufferParameters,
-				ArcGISTiledMapServiceLayer,
-				GraphicsLayer,
-				ImageParameters,
-				TileInfo,
-				WebTiledLayer,
-				ArcGISDynamicMapServiceLayer,
-				Point,
-				ScreenPoint,
-				Extent,
-				Polyline,
-				Polygon,
-				PictureMarkerSymbol,
-				SimpleMarkerSymbol,
-				SimpleLineSymbol,
-				CartographicLineSymbol,
-				PictureFillSymbol,
-				SimpleFillSymbol,
-				Draw
-			]) => {
+		]).then(([
+					 Map,
+					 urlUtils,
+					 esriConfig,
+					 Graphic,
+					 Color,
+					 SpatialReference,
+					 Geoprocessor,
+					 ProjectParameters,
+					 GeometryService,
+					 FeatureSet,
+					 FindTask,
+					 FindParameters,
+					 IdentifyTask,
+					 IdentifyParameters,
+					 QueryTask,
+					 Query,
+					 BufferParameters,
+					 ArcGISTiledMapServiceLayer,
+					 GraphicsLayer,
+					 ImageParameters,
+					 TileInfo,
+					 WebTiledLayer,
+					 ArcGISDynamicMapServiceLayer,
+					 Point,
+					 ScreenPoint,
+					 Extent,
+					 Polyline,
+					 Polygon,
+					 PictureMarkerSymbol,
+					 SimpleMarkerSymbol,
+					 SimpleLineSymbol,
+					 CartographicLineSymbol,
+					 PictureFillSymbol,
+					 SimpleFillSymbol,
+					 Draw
+				 ]) => {
 
 			// 初始化模块
 			this.Map = Map;
@@ -272,13 +275,49 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 
 		// 加载底图
 		if (this.mapType === 'tdt') {
+
+			// 初始底图
 			this.getTdtLayer(Array.isArray(this.mapUrl) ? this.mapUrl : [this.mapUrl]).then((layers: any[]) => {
-				layers.forEach((layer: any) => {
+				const baseamapLayerIds: string[] = [];
+				layers.forEach((layer: any, index: number) => {
+					baseamapLayerIds.push(layer.id);
 					this.map.addLayer(layer);
+				});
+				this.basemapIds.push(baseamapLayerIds);
+			});
+
+			// 切换的其它底图
+			this.submapUrl.forEach((submap: string[]) => {
+				this.getTdtLayer(Array.isArray(submap) ? submap : [submap]).then((layers: any[]) => {
+					const baseamapLayerIds: string[] = [];
+					layers.forEach((layer: any, index: number) => {
+						layer.setVisibility(false);
+						baseamapLayerIds.push(layer.id);
+						this.map.addLayer(layer);
+					});
+					this.basemapIds.push(baseamapLayerIds);
 				});
 			});
 		} else if (this.mapType === 'esri') {
-			this.map.addLayer(new this.ArcGISTiledMapServiceLayer(this.mapUrl));
+
+			// 初始底图
+			const esriBasemapLayerId: string = `${this.mapType}_base_0`,
+				esriBasemapLayer: any = new this.ArcGISTiledMapServiceLayer(this.mapUrl, {
+					id: esriBasemapLayerId
+				});
+			this.basemapIds.push(esriBasemapLayerId);
+			this.map.addLayer(esriBasemapLayer);
+
+			// 切换的其它底图
+			this.submapUrl.forEach((submap: string[], index: number) => {
+				const esriSubmapLayerId: string = `${this.mapType}_base_${index + 1}`,
+					esriSubmapLayer: any = new this.ArcGISTiledMapServiceLayer(submap, {
+						id: esriSubmapLayerId
+					});
+				esriSubmapLayer.setVisibility(false);
+				this.basemapIds.push(esriSubmapLayerId);
+				this.map.addLayer(esriSubmapLayer);
+			});
 		} else {
 			throw new Error('请指定输入属性 mapType 的值！');
 		}
@@ -379,6 +418,32 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 			link.href = this.esriCSSUrl;
 			head.appendChild(link);
 		}
+	}
+
+	/**
+	 * 底图切换
+	 * @param {number} layerIndex
+	 */
+	changeBaseLayer (layerIndex: number) {
+		this.basemapIds.forEach((mapIds: string | string[], index: number) => {
+			if (layerIndex === index) {
+				if (Array.isArray(mapIds)) {
+					mapIds.forEach((id: string) => {
+						this.map.getLayer(id).setVisibility(true);
+					});
+				} else {
+					this.map.getLayer(mapIds).setVisibility(true);
+				}
+			} else {
+				if (Array.isArray(mapIds)) {
+					mapIds.forEach((id: string) => {
+						this.map.getLayer(id).setVisibility(false);
+					});
+				} else {
+					this.map.getLayer(mapIds).setVisibility(false);
+				}
+			}
+		});
 	}
 
 	/**
