@@ -107,6 +107,8 @@
 
 - `exentChange`：地图范围改变触发该事件，参数$event为当前地图范围对象
 
+- `mapDestroy`：地图销毁完成后会触发该事件
+
 ### Properties
 
 - `map`（`any`） - 当前地图对象

@@ -103,6 +103,10 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 	@Output()
 	mapReady: EventEmitter<any> = new EventEmitter<any>(false);
 
+	// 地图销毁完成之后触发该事件
+	@Output()
+	mapDestroy: EventEmitter<any> = new EventEmitter<any>(false);
+
 	// 地图范围改变触发该事件
 	@Output()
 	exentChange: EventEmitter<any> = new EventEmitter<any>(false);
@@ -123,6 +127,8 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy() {
+		this.map.destroy();
+		this.mapDestroy.emit();
 	}
 
 	/**
