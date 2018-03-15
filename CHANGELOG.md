@@ -1,3 +1,7 @@
+# 2.2.1（2018-03-07）
+
+- `mapDestroy`中判断map是否`undefined`
+
 # 2.2.0（2018-03-07）
 
 - 新增地图销毁事件`mapDestroy`
