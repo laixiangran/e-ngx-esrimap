@@ -1,6 +1,6 @@
 # e-ngx-esrimap
 
-基于Angular的二维地图组件，使用的地图API是ArcGIS API for JavaScript v3.x（>=3.14）。
+基于 Angular 的二维地图组件，使用的地图 API 是 ArcGIS API for JavaScript v3.x（>=3.14）。
 
 ## Usage
 
@@ -73,29 +73,25 @@
     }
 	```
 
-### 注意
-
-如果出现跨域的问题，请检查项目根目录下是否存在`proxy.config`及`proxy.jsp`，没有请放置。
-
 ## API
 
 ### Inputs
 
-- `isProxy`（`boolean?=false`） - 是否开启代理，可使用esri提供的[几个平台的代理文件](https://github.com/Esri/resource-proxy)
+- `isProxy`（`boolean?=false`） - 是否开启代理，可使用 esri 提供的[几个平台的代理文件](https://github.com/Esri/resource-proxy)
 
-- `proxyUrl`（`string?='proxy.jsp'`） - 代理页面的路径
+- `proxyUrl`（`string?='proxy.jsp'`） - 代理页面的路径。如果出现跨域的问题，请检查是否正确设置代理路径
 
-- `mapUrl`（`string[] | string='http://server.arcgisonline.com/ArcGIS/rest/services/ESRI_StreetMap_World_2D/MapServer'`） - 基础底图路径，如`mapType='tdt'`，则mapUrl可从这四种地图类型`vec（矢量图层）, cva（矢量标注）, img（影像图层）, cia（影像标注）`通过数组形式组合使用。mapType='esri'，则mapUrl是完整的ArcGIS切片地图服务路径
+- `mapUrl`（`string[] | string='http://server.arcgisonline.com/ArcGIS/rest/services/ESRI_StreetMap_World_2D/MapServer'`） - 基础底图路径，如 `mapType='tdt'`，则 mapUrl 可从这四种地图类型 `vec（矢量图层）, cva（矢量标注）, img（影像图层）, cia（影像标注）` 通过数组形式组合使用。mapType='esri'，则 mapUrl 是完整的 ArcGIS 切片地图服务路径
 
-- `submapUrl`（`any[]`）- 其它切换的底图路径，如`mapType='tdt'`，则submapUrl可从这四种地图类型`vec（矢量图层）, cva（矢量标注）, img（影像图层）, cia（影像标注）`通过数组形式组合使用。mapType='esri'，则submapUrl是完整的ArcGIS切片地图服务路径的数组
+- `submapUrl`（`any[]`）- 其它切换的底图路径，如 `mapType='tdt'`，则 submapUrl 可从这四种地图类型 `vec（矢量图层）, cva（矢量标注）, img（影像图层）, cia（影像标注）` 通过数组形式组合使用。mapType='esri'，则 submapUrl 是完整的 ArcGIS 切片地图服务路径的数组
 
-- `mapType`（`string?='esri'`） - 基础底图类型，`tdt`：天地图，`esri`：esri地图服务
+- `mapType`（`string?='esri'`） - 基础底图类型，`tdt`：天地图，`esri`：esri 地图服务
 
 - `geoUrl`（`string?='http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer'`） - 几何服务路径，默认是在线路径，最好配置自己的路径
 
-- `gisApiUrl`（`string?='http://js.arcgis.com/3.23/'`） - arcgis javascript API路径，默认是在线路径，最好配置自己的路径
+- `gisApiUrl`（`string?='http://js.arcgis.com/3.23/'`） - arcgis javascript API 路径，默认是在线路径，最好配置自己的路径
 
-- `esriCSSUrl`（`string?='http://js.arcgis.com/3.23/esri/css/esri.css'`） - esri.css路径，默认是在线路径，最好配置自己的路径
+- `esriCSSUrl`（`string?='http://js.arcgis.com/3.23/esri/css/esri.css'`） - esri.css 路径，默认是在线路径，最好配置自己的路径
 
 - `initExtent`（`Object`） - 初始地图范围，`{xmax, xmin, ymax, ymin}`
 
@@ -103,11 +99,13 @@
 
 ### Outputs
 
-- `mapReady`：地图初始化完成后会触发该事件，参数$event为当前component实例对象
+- `mapReady`：地图初始化事件，参数 $event 为当前 component 实例对象
 
-- `exentChange`：地图范围改变触发该事件，参数$event为当前地图范围对象
+- `exentChange`：地图范围改变事件，参数 $event 为当前地图范围对象
 
-- `mapDestroy`：地图销毁完成后会触发该事件
+- `mapDestroy`：地图销毁事件
+
+- `baseLayerChange`：底图切换事件，参数 $event 格式为 {prev: number, curr: number}，prev 为切换之前底图序号，curr 为当前底图序号
 
 ### Properties
 
@@ -115,13 +113,13 @@
 
 ### Instance Methods
 
-- `changeBaseLayer (layerIndex: number): void` - 底图切换，index是所有待切换底图的序号。mapUrl对应序号为0，其它图层序号根据submapUrl的数组序号加1得到
+- `changeBaseLayer (layerIndex: number): void` - 底图切换，index 是所有待切换底图的序号。mapUrl 对应序号为 0，其它图层序号根据 submapUrl 的数组序号加 1 得到
 
-- `loadEsriModules(modules: string[]): Promise<any>` - 加载ArcGIS API for JavaScript的模块，如：`['esri/map']`
+- `loadEsriModules(modules: string[]): Promise<any>` - 加载 ArcGIS API for JavaScript 的模块，如：`['esri/map']`
 
-- `gpAsyncGetResultData(params: AsyncGetResultParam): void` - GP服务获取数据（异步）
+- `gpAsyncGetResultData(params: AsyncGetResultParam): void` - GP 服务获取数据（异步）
 
-- `gpAsyncGetResultImageLayer(params: AsyncGetResultParam): void` - GP服务获取结果图片图层（异步）
+- `gpAsyncGetResultImageLayer(params: AsyncGetResultParam): void` - GP 服务获取结果图片图层（异步）
 
 - `locationPoint(point: {x: number, y: number}): void` - 点定位
 
@@ -129,7 +127,7 @@
 
 - `showMapInfoWindow(params: any): void` - 显示地图信息窗口
 
-         * params属性如下：
+         * params 属性如下：
          * title {String} 信息窗口标题
          * content {String} 信息窗口内容，支持html
          * location {Point} 信息窗口位置

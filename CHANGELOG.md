@@ -1,18 +1,22 @@
+# 5.0.1（2018-05-02）
+
+- 新增底图切换事件 baseLayerChange
+
 # 5.0.0（2018-04-24）
 
 - 升级angular到5.0.0
 
 # 2.2.1（2018-03-07）
 
-- `mapDestroy`中判断map是否`undefined`
+- `mapDestroy` 中判断 map 是否 `undefined`
 
 # 2.2.0（2018-03-07）
 
-- 新增地图销毁事件`mapDestroy`
+- 新增地图销毁事件 `mapDestroy`
 
 # 2.1.1（2018-02-12）
 
-- 新增输入属性submapUrl及changeBaseLayer方法实现底图切换功能
+- 新增输入属性 submapUrl 及 changeBaseLayer 方法实现底图切换功能
 
 # 2.0.5（2018-02-08）
 
@@ -24,7 +28,7 @@
 
 # 2.0.3（2018-01-26）
 
-- 新增arcgis jsAPI多个常用的类
+- 新增 arcgis jsAPI 多个常用的类
 
 # 2.0.2（2018-01-10）
 
@@ -36,11 +40,11 @@
 
 # 2.0.0（2017-12-19）
 
-- ArcGIS API for JavaScript 升级到v3.23
+- ArcGIS API for JavaScript 升级到 v3.23
 
 # 1.2.0（2017-12-13）
 
-- 将essence-ng2-esrimap更名为e-ngx-esrimap
+- 将 essence-ng2-esrimap 更名为 e-ngx-esrimap
 
 # 1.1.8（2017-12-06）
 
@@ -60,11 +64,11 @@
 
 # 1.1.4（2017-10-18）
 
-- 新增 输入属性proxyUrl，用于指定代理的jsp页面路径
+- 新增 输入属性 proxyUrl，用于指定代理路径
 
 # 1.1.3 (2017-09-25)
 
-- 新增 输入属性esriCSSUrl，用于动态加载esri.css
+- 新增 输入属性 esriCSSUrl，用于动态加载 esri.css
 
 - 修复 IE10的bug
 
@@ -74,7 +78,7 @@
 
 # 1.1.1 (2017-07-04)
 
-- 新增 设置地图代理的输入属性isProxy
+- 新增 设置地图代理的输入属性 isProxy
 
 # 1.1.0 (2017-07-04)
 

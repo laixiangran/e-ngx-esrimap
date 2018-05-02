@@ -33,11 +33,23 @@ export class AppComponent implements OnInit {
 	}
 
 	/**
+	 * 切换
+	 * @param {number} $event
+	 */
+	onEsriBaseLayerChange($event: number) {
+		console.log($event);
+	}
+
+	/**
 	 * 天地图地图加载完成
 	 * @param $event
 	 */
 	onTdtMapReady($event: ENgxEsriMapComponent) {
 		this.tdtMapComponent = $event;
 		this.tdtMap = this.tdtMapComponent.map;
+	}
+
+	onTdtBaseLayerChange($event: number) {
+		console.log($event);
 	}
 }

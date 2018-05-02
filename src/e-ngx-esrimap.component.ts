@@ -14,6 +14,7 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 	private timeOutId: number; // 定时器id
 	private locationLayer: any; // 定位图层
 	private basemapIds: any[] = []; // 所有底图id
+	private currBaseLayerIndex: number = 0; // 当前底图序号
 
 	// esri
 	Map: any;
@@ -99,17 +100,21 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 	// 是否启用导航
 	@Input() enableNavigation: boolean = true;
 
-	// 地图初始化完成之后触发该事件
+	// 地图初始化事件
 	@Output()
 	mapReady: EventEmitter<any> = new EventEmitter<any>(false);
 
-	// 地图销毁完成之后触发该事件
+	// 地图销毁事件
 	@Output()
 	mapDestroy: EventEmitter<any> = new EventEmitter<any>(false);
 
-	// 地图范围改变触发该事件
+	// 地图范围改变事件
 	@Output()
 	exentChange: EventEmitter<any> = new EventEmitter<any>(false);
+
+	// 底图切换事件
+	@Output()
+	baseLayerChange: EventEmitter<any> = new EventEmitter<any>(false);
 
 	constructor(private esriLoaderService: ENgxEsriMapLoaderService) {}
 
@@ -433,25 +438,33 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 	 * @param {number} layerIndex
 	 */
 	changeBaseLayer (layerIndex: number) {
-		this.basemapIds.forEach((mapIds: string | string[], index: number) => {
-			if (layerIndex === index) {
-				if (Array.isArray(mapIds)) {
-					mapIds.forEach((id: string) => {
-						this.map.getLayer(id).setVisibility(true);
+		if (this.currBaseLayerIndex !== layerIndex) {
+			this.basemapIds.forEach((mapIds: string | string[], index: number) => {
+				if (layerIndex === index) {
+					const prevBaseLayerIndex = this.currBaseLayerIndex;
+					this.currBaseLayerIndex = layerIndex;
+					if (Array.isArray(mapIds)) {
+						mapIds.forEach((id: string) => {
+							this.map.getLayer(id).setVisibility(true);
+						});
+					} else {
+						this.map.getLayer(mapIds).setVisibility(true);
+					}
+					this.baseLayerChange.emit({
+						prev: prevBaseLayerIndex,
+						curr: this.currBaseLayerIndex
 					});
 				} else {
-					this.map.getLayer(mapIds).setVisibility(true);
+					if (Array.isArray(mapIds)) {
+						mapIds.forEach((id: string) => {
+							this.map.getLayer(id).setVisibility(false);
+						});
+					} else {
+						this.map.getLayer(mapIds).setVisibility(false);
+					}
 				}
-			} else {
-				if (Array.isArray(mapIds)) {
-					mapIds.forEach((id: string) => {
-						this.map.getLayer(id).setVisibility(false);
-					});
-				} else {
-					this.map.getLayer(mapIds).setVisibility(false);
-				}
-			}
-		});
+			});
+		}
 	}
 
 	/**
