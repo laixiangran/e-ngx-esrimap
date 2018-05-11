@@ -59,6 +59,8 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 	CartographicLineSymbol: any;
 	PictureFillSymbol: any;
 	SimpleFillSymbol: any;
+	TextSymbol: any;
+	Font: any;
 
 	// toolbar
 	Draw: any;
@@ -177,6 +179,8 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 			'esri/symbols/CartographicLineSymbol',
 			'esri/symbols/PictureFillSymbol',
 			'esri/symbols/SimpleFillSymbol',
+			'esri/symbols/TextSymbol',
+			'esri/symbols/Font',
 			'esri/toolbars/draw'
 		]).then(([
 					 Map,
@@ -213,6 +217,8 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 					 CartographicLineSymbol,
 					 PictureFillSymbol,
 					 SimpleFillSymbol,
+					 TextSymbol,
+					 Font,
 					 Draw
 				 ]) => {
 
@@ -251,6 +257,8 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 			this.CartographicLineSymbol = CartographicLineSymbol;
 			this.PictureFillSymbol = PictureFillSymbol;
 			this.SimpleFillSymbol = SimpleFillSymbol;
+			this.TextSymbol = TextSymbol;
+			this.Font = Font;
 			this.Draw = Draw;
 
 			this.initMap();

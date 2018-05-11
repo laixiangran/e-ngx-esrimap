@@ -110,6 +110,60 @@
 ### Properties
 
 - `map`（`any`） - 当前地图对象
+- `geometryService`（`any`) - 当前几何服务实例
+
+**以下为默认加载的模块，作为实例属性提供使用**
+
+```javascript
+// esri
+Map: any;
+Color: any;
+Graphic: any;
+SpatialReference: any;
+urlUtils: any;
+esriConfig: any;
+
+// esri/tasks
+Geoprocessor: any;
+GeometryService: any;
+FeatureSet: any;
+FindTask: any;
+FindParameters: any;
+IdentifyTask: any;
+IdentifyParameters: any;
+QueryTask: any;
+Query: any;
+ProjectParameters: any;
+BufferParameters: any;
+
+// esri/layers
+ArcGISTiledMapServiceLayer: any;
+ArcGISDynamicMapServiceLayer: any;
+WebTiledLayer: any;
+GraphicsLayer: any;
+ImageParameters: any;
+TileInfo: any;
+
+// esri/geometry
+Extent: any;
+Point: any;
+ScreenPoint: any;
+Polyline: any;
+Polygon: any;
+
+// esri/symbols
+PictureMarkerSymbol: any;
+SimpleMarkerSymbol: any;
+SimpleLineSymbol: any;
+CartographicLineSymbol: any;
+PictureFillSymbol: any;
+SimpleFillSymbol: any;
+TextSymbol: any;
+Font: any;
+
+// toolbar
+Draw: any;
+```
 
 ### Instance Methods
 
