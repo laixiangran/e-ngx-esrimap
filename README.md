@@ -24,7 +24,7 @@
 	import {ENgxEsriMapModule} from "e-ngx-esrimap";
 	@NgModule({
 	    imports: [
-	        ENgXEsriMapModule
+	        ENgxEsriMapModule
 	    ]
 	})
 	```
