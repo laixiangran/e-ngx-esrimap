@@ -13,7 +13,6 @@
 				[gisApiUrl]="gisApiUrl"
 				[geoUrl]="geoUrl"
 				[esriCSSUrl]="esriCSSUrl"
-				[initExtent]="{xmax: 116.39029888900006, xmin: 116.04209077900009, ymax: 40.161018230000025, ymin: 39.885287565000056}"
 				(baseLayerChange)="onTdtBaseLayerChange($event)"
 				(mapReady)="onTdtMapReady($event)">
 		</e-ngx-esrimap>
@@ -29,7 +28,7 @@
 			[gisApiUrl]="gisApiUrl"
 			[geoUrl]="geoUrl"
 			[esriCSSUrl]="esriCSSUrl"
-			[initExtent]="{xmax: 116.39029888900006, xmin: 116.04209077900009, ymax: 40.161018230000025, ymin: 39.885287565000056}"
+			[initExtent]="initExtent"
 			(baseLayerChange)="onEsriBaseLayerChange($event)"
 			(mapReady)="onEsriMapReady($event)">
 		</e-ngx-esrimap>

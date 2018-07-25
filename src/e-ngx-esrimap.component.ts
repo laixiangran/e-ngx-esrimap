@@ -15,6 +15,7 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 	private locationLayer: any; // 定位图层
 	private basemapIds: any[] = []; // 所有底图id
 	private currBaseLayerIndex: number = 0; // 当前底图序号
+	private fit: boolean = false;
 
 	// esri
 	Map: any;
@@ -413,8 +414,8 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 	private addMapEvent() {
 		this.map.on('load', () => {
 			if (this.initExtent) {
-				this.initExtent.spatialReference = this.map.spatialReference;
-				this.map.setExtent(new this.Extent(this.initExtent), true).then(() => {
+				this.fit = true;
+				this.setExtent(this.initExtent, this.fit).then(() => {
 					this.mapReady.emit(this);
 				});
 			} else {
@@ -512,7 +513,19 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 	 * 全图
 	 */
 	fullMap() {
-		this.map.setExtent(new this.Extent(this.initExtent), true);
+		this.map.setExtent(this.initExtent, this.fit);
+	}
+
+	/**
+	 * 设置地图范围
+	 * @param extent
+	 * @param {boolean} fit
+	 */
+	setExtent(extent: any, fit: boolean = false): any {
+		this.fit = fit;
+		extent.spatialReference = this.map.spatialReference;
+		this.initExtent = new this.Extent(extent);
+		return this.map.setExtent(this.initExtent, fit);
 	}
 
 	/**

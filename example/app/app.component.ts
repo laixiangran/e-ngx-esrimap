@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
 	geoUrl: string = environment.geoUrl;
 	gisApiUrl: string = environment.gisApiUrl;
 	esriCSSUrl: string = environment.esriCSSUrl;
+	initExtent: any = {xmax: 116.39029888900006, xmin: 116.04209077900009, ymax: 40.161018230000025, ymin: 39.885287565000056};
 
 	constructor() {
 	}
@@ -47,6 +48,7 @@ export class AppComponent implements OnInit {
 	onTdtMapReady($event: ENgxEsriMapComponent) {
 		this.tdtMapComponent = $event;
 		this.tdtMap = this.tdtMapComponent.map;
+		this.tdtMapComponent.setExtent(this.initExtent);
 	}
 
 	onTdtBaseLayerChange($event: number) {

@@ -9,6 +9,6 @@ export const environment = {
 	serverHost: '/',
 	mapUrl: 'http://server.arcgisonline.com/ArcGIS/rest/services/ESRI_StreetMap_World_2D/MapServer',
 	geoUrl: 'https://utility.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer',
-	gisApiUrl: 'http://js.arcgis.com/3.23/',
-	esriCSSUrl: 'http://js.arcgis.com/3.23/esri/css/esri.css'
+	gisApiUrl: 'https://js.arcgis.com/3.23/',
+	esriCSSUrl: 'https://js.arcgis.com/3.23/esri/css/esri.css'
 };

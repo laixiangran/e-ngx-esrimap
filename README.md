@@ -93,7 +93,7 @@
 
 - `esriCSSUrl`（`string?='http://js.arcgis.com/3.23/esri/css/esri.css'`） - esri.css 路径，默认是在线路径，最好配置自己的路径
 
-- `initExtent`（`Object`） - 初始地图范围，`{xmax, xmin, ymax, ymin}`
+- `initExtent`（`Object`） - 初始地图范围，`{xmax, xmin, ymax, ymin}`。默认范围自适应屏幕显示，如果不想自适应则可调用 setExtent 方法设置范围并指定是否自适应
 
 - `enableNavigation`（`boolean?=true`） - 是否启用导航部件
 
@@ -199,6 +199,8 @@ Draw: any;
 - `latToDec(dfm: string): number` - 将坐标由度分秒表示转为十进制表示
 
 - `decToLat(sjz: number): string` - 将坐标由十进制表示转为度分秒表示
+
+- `setExtent(extent: any, fit: boolean = false): Deferred` - 设置地图范围
 
 ## Develop
 
