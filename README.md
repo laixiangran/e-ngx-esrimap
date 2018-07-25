@@ -150,6 +150,7 @@ Point: any;
 ScreenPoint: any;
 Polyline: any;
 Polygon: any;
+WebMercatorUtils: any;
 
 // esri/symbols
 PictureMarkerSymbol: any;
@@ -164,6 +165,8 @@ Font: any;
 // toolbar
 Draw: any;
 ```
+
+**没有默认加载的模块，可通过调用 loadEsriModules 方法进行加载**
 
 ### Instance Methods
 

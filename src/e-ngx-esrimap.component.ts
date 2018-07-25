@@ -51,6 +51,7 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 	ScreenPoint: any;
 	Polyline: any;
 	Polygon: any;
+	WebMercatorUtils: any;
 
 	// esri/symbols
 	PictureMarkerSymbol: any;
@@ -173,6 +174,7 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 			'esri/geometry/Extent',
 			'esri/geometry/Polyline',
 			'esri/geometry/Polygon',
+			'esri/geometry/webMercatorUtils',
 			'esri/symbols/PictureMarkerSymbol',
 			'esri/symbols/SimpleMarkerSymbol',
 			'esri/symbols/SimpleLineSymbol',
@@ -211,6 +213,7 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 					 Extent,
 					 Polyline,
 					 Polygon,
+					 WebMercatorUtils,
 					 PictureMarkerSymbol,
 					 SimpleMarkerSymbol,
 					 SimpleLineSymbol,
@@ -251,6 +254,7 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 			this.Extent = Extent;
 			this.Polyline = Polyline;
 			this.Polygon = Polygon;
+			this.WebMercatorUtils = WebMercatorUtils;
 			this.PictureMarkerSymbol = PictureMarkerSymbol;
 			this.SimpleMarkerSymbol = SimpleMarkerSymbol;
 			this.SimpleLineSymbol = SimpleLineSymbol;

@@ -1,3 +1,7 @@
+# 5.0.3（2018-07-25）
+
+- 新增 webMercatorUtils 模块
+
 # 5.0.2（2018-05-11）
 
 - 新增 TextSymbol 及 Font 模块
