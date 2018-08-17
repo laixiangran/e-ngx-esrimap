@@ -324,6 +324,26 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 					this.basemapIds.push(baseamapLayerIds);
 				});
 			});
+		} else if (this.mapType === 'google') {
+
+			// 初始底图
+			this.getGoogleLayer(this.mapUrl).then((layer: any) => {
+				const googleMapLayerId: string = `${this.mapType}_base_0`;
+				this.basemapIds.push(googleMapLayerId);
+				layer.id = googleMapLayerId;
+				this.map.addLayer(layer);
+			});
+
+			// 切换的其它底图
+			this.submapUrl.forEach((submap: any, index: number) => {
+				this.getGoogleLayer(submap).then((layer: any) => {
+					const googleMapLayerId: string = `${this.mapType}_base_${index + 1}`;
+					this.basemapIds.push(googleMapLayerId);
+					layer.id = googleMapLayerId;
+					layer.setVisibility(false);
+					this.map.addLayer(layer);
+				});
+			});
 		} else if (this.mapType === 'esri') {
 
 			// 初始底图
@@ -340,8 +360,8 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 					esriSubmapLayer: any = new this.ArcGISTiledMapServiceLayer(submap, {
 						id: esriSubmapLayerId
 					});
-				esriSubmapLayer.setVisibility(false);
 				this.basemapIds.push(esriSubmapLayerId);
+				esriSubmapLayer.setVisibility(false);
 				this.map.addLayer(esriSubmapLayer);
 			});
 		} else {
@@ -356,45 +376,39 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 	 */
 	private getTdtLayer(layers: string[]): Promise<any> {
 		return new Promise((resolve) => {
-			this.loadEsriModules([
-				'esri/layers/TileInfo',
-				'esri/layers/WebTiledLayer'])
-				.then(([TileInfo, WebTiledLayer]) => {
-
-				});
 			const tileInfo: any = new this.TileInfo({
-				rows: 256,
-				cols: 256,
-				compressionQuality: 0,
-				origin: {
-					x: -180,
-					y: 90
-				},
-				spatialReference: {
-					wkid: 4326
-				},
-				lods: [
-					{'level': 2, 'resolution': 0.3515625, 'scale': 147748796.52937502},
-					{'level': 3, 'resolution': 0.17578125, 'scale': 73874398.264687508},
-					{'level': 4, 'resolution': 0.087890625, 'scale': 36937199.132343754},
-					{'level': 5, 'resolution': 0.0439453125, 'scale': 18468599.566171877},
-					{'level': 6, 'resolution': 0.02197265625, 'scale': 9234299.7830859385},
-					{'level': 7, 'resolution': 0.010986328125, 'scale': 4617149.8915429693},
-					{'level': 8, 'resolution': 0.0054931640625, 'scale': 2308574.9457714846},
-					{'level': 9, 'resolution': 0.00274658203125, 'scale': 1154287.4728857423},
-					{'level': 10, 'resolution': 0.001373291015625, 'scale': 577143.73644287116},
-					{'level': 11, 'resolution': 0.0006866455078125, 'scale': 288571.86822143558},
-					{'level': 12, 'resolution': 0.00034332275390625, 'scale': 144285.93411071779},
-					{'level': 13, 'resolution': 0.000171661376953125, 'scale': 72142.967055358895},
-					{'level': 14, 'resolution': 8.58306884765625e-005, 'scale': 36071.483527679447},
-					{'level': 15, 'resolution': 4.291534423828125e-005, 'scale': 18035.741763839724},
-					{'level': 16, 'resolution': 2.1457672119140625e-005, 'scale': 9017.8708819198619},
-					{'level': 17, 'resolution': 1.0728836059570313e-005, 'scale': 4508.9354409599309},
-					{'level': 18, 'resolution': 5.3644180297851563e-006, 'scale': 2254.4677204799655}
-				]
-			});
-			const subDomains: string[] = ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7'];
-			const tdtLayers: any[] = [];
+					rows: 256,
+					cols: 256,
+					compressionQuality: 0,
+					origin: {
+						x: -180,
+						y: 90
+					},
+					spatialReference: {
+						wkid: 4326
+					},
+					lods: [
+						{'level': 2, 'resolution': 0.3515625, 'scale': 147748796.52937502},
+						{'level': 3, 'resolution': 0.17578125, 'scale': 73874398.264687508},
+						{'level': 4, 'resolution': 0.087890625, 'scale': 36937199.132343754},
+						{'level': 5, 'resolution': 0.0439453125, 'scale': 18468599.566171877},
+						{'level': 6, 'resolution': 0.02197265625, 'scale': 9234299.7830859385},
+						{'level': 7, 'resolution': 0.010986328125, 'scale': 4617149.8915429693},
+						{'level': 8, 'resolution': 0.0054931640625, 'scale': 2308574.9457714846},
+						{'level': 9, 'resolution': 0.00274658203125, 'scale': 1154287.4728857423},
+						{'level': 10, 'resolution': 0.001373291015625, 'scale': 577143.73644287116},
+						{'level': 11, 'resolution': 0.0006866455078125, 'scale': 288571.86822143558},
+						{'level': 12, 'resolution': 0.00034332275390625, 'scale': 144285.93411071779},
+						{'level': 13, 'resolution': 0.000171661376953125, 'scale': 72142.967055358895},
+						{'level': 14, 'resolution': 8.58306884765625e-005, 'scale': 36071.483527679447},
+						{'level': 15, 'resolution': 4.291534423828125e-005, 'scale': 18035.741763839724},
+						{'level': 16, 'resolution': 2.1457672119140625e-005, 'scale': 9017.8708819198619},
+						{'level': 17, 'resolution': 1.0728836059570313e-005, 'scale': 4508.9354409599309},
+						{'level': 18, 'resolution': 5.3644180297851563e-006, 'scale': 2254.4677204799655}
+					]
+				}),
+				subDomains: string[] = ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7'],
+				tdtLayers: any[] = [];
 			layers.forEach((type) => {
 				const templateUrl: string = 'http://${subDomain}.tianditu.com/DataServer?T=' + type + '_c&X=${col}&Y=${row}&L=${level}';
 				const tdtLayer: any = new this.WebTiledLayer(templateUrl, {
@@ -405,6 +419,58 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 				tdtLayers.push(tdtLayer);
 			});
 			resolve(tdtLayers);
+		});
+	}
+
+	/**
+	 * 获取谷歌图层
+	 * @param layer 图层的代码
+	 * @returns {Promise<T>}
+	 */
+	private getGoogleLayer(layer: any): Promise<any> {
+		return new Promise((resolve) => {
+			const tileInfo: any = new this.TileInfo({
+					rows: 256,
+					cols: 256,
+					compressionQuality: 0,
+					origin: {
+						'x': -20037508.342787,
+						'y': 20037508.342787
+					},
+					spatialReference: {
+						wkid: 102113
+					},
+					lods: [
+						{'level': 0, 'scale': 591657527.591555, 'resolution': 156543.033928},
+						{'level': 1, 'scale': 295828763.795777, 'resolution': 78271.5169639999},
+						{'level': 2, 'scale': 147914381.897889, 'resolution': 39135.7584820001},
+						{'level': 3, 'scale': 73957190.948944, 'resolution': 19567.8792409999},
+						{'level': 4, 'scale': 36978595.474472, 'resolution': 9783.93962049996},
+						{'level': 5, 'scale': 18489297.737236, 'resolution': 4891.96981024998},
+						{'level': 6, 'scale': 9244648.868618, 'resolution': 2445.98490512499},
+						{'level': 7, 'scale': 4622324.434309, 'resolution': 1222.99245256249},
+						{'level': 8, 'scale': 2311162.217155, 'resolution': 611.49622628138},
+						{'level': 9, 'scale': 1155581.108577, 'resolution': 305.748113140558},
+						{'level': 10, 'scale': 577790.554289, 'resolution': 152.874056570411},
+						{'level': 11, 'scale': 288895.277144, 'resolution': 76.4370282850732},
+						{'level': 12, 'scale': 144447.638572, 'resolution': 38.2185141425366},
+						{'level': 13, 'scale': 72223.819286, 'resolution': 19.1092570712683},
+						{'level': 14, 'scale': 36111.909643, 'resolution': 9.55462853563415},
+						{'level': 15, 'scale': 18055.954822, 'resolution': 4.77731426794937},
+						{'level': 16, 'scale': 9027.977411, 'resolution': 2.38865713397468},
+						{'level': 17, 'scale': 4513.988705, 'resolution': 1.19432856685505},
+						{'level': 18, 'scale': 2256.994353, 'resolution': 0.597164283559817},
+						{'level': 19, 'scale': 1128.497176, 'resolution': 0.298582141647617}
+					]
+				}),
+				subDomains: string[] = ['mt0', 'mt1', 'mt2', 'mt3'],
+				templateUrl: string = 'http://${subDomain}.google.cn/vt/lyrs=' + layer + '&hl=zh-CN&gl=cn&x=${col}&y=${row}&z=${level}&s=Gali',
+				googleLayer: any = new this.WebTiledLayer(templateUrl, {
+					id: 'google_' + layer,
+					subDomains: subDomains,
+					tileInfo: tileInfo
+				});
+			resolve(googleLayer);
 		});
 	}
 
@@ -450,7 +516,7 @@ export class ENgxEsriMapComponent implements OnInit, OnDestroy {
 	 * 底图切换
 	 * @param {number} layerIndex
 	 */
-	changeBaseLayer (layerIndex: number) {
+	changeBaseLayer(layerIndex: number) {
 		if (this.currBaseLayerIndex !== layerIndex) {
 			this.basemapIds.forEach((mapIds: string | string[], index: number) => {
 				if (layerIndex === index) {

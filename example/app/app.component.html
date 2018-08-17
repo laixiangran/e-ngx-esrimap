@@ -1,6 +1,22 @@
 <div class="app_main">
 	<h1>esrimap Component for Angular</h1>
 	<div style="height: 600px;">
+		<h2>谷歌地图服务</h2>
+		<button (click)="googleMapComponent.changeBaseLayer(0)">切换底图1</button>
+		<button (click)="googleMapComponent.changeBaseLayer(1)">切换底图2</button>
+		<button (click)="googleMapComponent.changeBaseLayer(2)">切换底图3</button>
+		<hr>
+		<e-ngx-esrimap
+				[mapType]="'google'"
+				[mapUrl]="'m'"
+				[submapUrl]="['y', 'p']"
+				[gisApiUrl]="gisApiUrl"
+				[geoUrl]="geoUrl"
+				[esriCSSUrl]="esriCSSUrl"
+				[initExtent]="initExtent2"
+				(baseLayerChange)="onGoogleBaseLayerChange($event)"
+				(mapReady)="onGoogleMapReady($event)">
+		</e-ngx-esrimap>
 		<h2>天地图地图服务</h2>
 		<button (click)="tdtMapComponent.changeBaseLayer(0)">切换底图1</button>
 		<button (click)="tdtMapComponent.changeBaseLayer(1)">切换底图2</button>

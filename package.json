@@ -1,6 +1,6 @@
 {
 	"name": "e-ngx-esrimap",
-	"version": "5.0.4",
+	"version": "5.1.0",
 	"description": "基于Angular的二维地图组件，使用的地图API是ArcGIS API for JavaScript v3.x（>=3.14）",
 	"keywords": [
 		"angular",

@@ -32,19 +32,27 @@
 4. Use in the template
 
 	```html
-    <h2>ArcGIS地图服务</h2>
+    <h2>谷歌地图服务</h2>
+    <button (click)="googleMapComponent.changeBaseLayer(0)">切换底图1</button>
+    <button (click)="googleMapComponent.changeBaseLayer(1)">切换底图2</button>
+    <button (click)="googleMapComponent.changeBaseLayer(2)">切换底图3</button>
+    <hr>
     <e-ngx-esrimap
-        [isProxy]="false"
-        [mapUrl]="mapUrl"
-        [submapUrl]="[mapUrl, mapUrl]"
-        [enableNavigation]="false"
-        [gisApiUrl]="gisApiUrl"
-        [geoUrl]="geoUrl"
-        [esriCSSUrl]="esriCSSUrl"
-        [initExtent]="{xmax: 116.39029888900006, xmin: 116.04209077900009, ymax: 40.161018230000025, ymin: 39.885287565000056}"
-        (mapReady)="onEsriMapReady($event)">
+            [mapType]="'google'"
+            [mapUrl]="'m'"
+            [submapUrl]="['y', 'p']"
+            [gisApiUrl]="gisApiUrl"
+            [geoUrl]="geoUrl"
+            [esriCSSUrl]="esriCSSUrl"
+            [initExtent]="initExtent2"
+            (baseLayerChange)="onGoogleBaseLayerChange($event)"
+            (mapReady)="onGoogleMapReady($event)">
     </e-ngx-esrimap>
     <h2>天地图地图服务</h2>
+    <button (click)="tdtMapComponent.changeBaseLayer(0)">切换底图1</button>
+    <button (click)="tdtMapComponent.changeBaseLayer(1)">切换底图2</button>
+    <button (click)="tdtMapComponent.changeBaseLayer(2)">切换底图3</button>
+    <hr>
     <e-ngx-esrimap
             [mapType]="'tdt'"
             [mapUrl]="['vec','cva']"
@@ -52,24 +60,94 @@
             [gisApiUrl]="gisApiUrl"
             [geoUrl]="geoUrl"
             [esriCSSUrl]="esriCSSUrl"
-            [initExtent]="{xmax: 116.39029888900006, xmin: 116.04209077900009, ymax: 40.161018230000025, ymin: 39.885287565000056}"
+            (baseLayerChange)="onTdtBaseLayerChange($event)"
             (mapReady)="onTdtMapReady($event)">
     </e-ngx-esrimap>
+    <h2>ArcGIS地图服务</h2>
+    <button (click)="esriMapComponent.changeBaseLayer(0)">切换底图1</button>
+    <button (click)="esriMapComponent.changeBaseLayer(1)">切换底图2</button>
+    <hr>
+    <e-ngx-esrimap
+        [isProxy]="false"
+        [mapUrl]="mapUrl"
+        [submapUrl]="['http://server.arcgisonline.com/arcgis/rest/services/ESRI_Imagery_World_2D/MapServer']"
+        [enableNavigation]="false"
+        [gisApiUrl]="gisApiUrl"
+        [geoUrl]="geoUrl"
+        [esriCSSUrl]="esriCSSUrl"
+        [initExtent]="initExtent"
+        (baseLayerChange)="onEsriBaseLayerChange($event)"
+        (mapReady)="onEsriMapReady($event)">
+    </e-ngx-esrimap>
+    <br>
 	```
 
 5. Use in the component
 
 	```typescript
-    esriMap: ENgxEsriMapComponent;
-    map: any;
+    googleMapComponent: ENgxEsriMapComponent;
+    googleMap: any;
+    tdtMapComponent: ENgxEsriMapComponent;
+    tdtMap: any;
+    esriMapComponent: ENgxEsriMapComponent;
+    esriMap: any;
     mapUrl: string = 'http://server.arcgisonline.com/ArcGIS/rest/services/ESRI_StreetMap_World_2D/MapServer';
     geoUrl: string = 'http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer';
     gisApiUrl: string = 'http://js.arcgis.com/3.23/';
     esriCSSUrl: string = 'http://js.arcgis.com/3.23/esri/css/esri.css';
+    initExtent: any = {xmax: 116.39029888900006, xmin: 116.04209077900009, ymax: 40.161018230000025, ymin: 39.885287565000056};
+    initExtent2: any = {xmax: 12980277.986602597, xmin: 12934415.769631553, ymax: 4864627.423165954, ymin: 4841696.314680432};
 
-    onMapReady($event: ENgxEsriMapComponent) {
-        this.esriMap = $event;
-        this.map = this.esriMap.map;
+    /**
+     * 谷歌地图加载完成
+     * @param $event
+     */
+    onGoogleMapReady($event: ENgxEsriMapComponent) {
+        this.googleMapComponent = $event;
+        this.googleMap = this.googleMapComponent.map;
+    }
+
+    /**
+     * 谷歌底图切换
+     * @param {number} $event
+     */
+    onGoogleBaseLayerChange($event: number) {
+        console.log($event);
+    }
+
+    /**
+     * 天地图地图加载完成
+     * @param $event
+     */
+    onTdtMapReady($event: ENgxEsriMapComponent) {
+        this.tdtMapComponent = $event;
+        this.tdtMap = this.tdtMapComponent.map;
+        this.tdtMapComponent.setExtent(this.initExtent);
+    }
+
+    /**
+     * 天地图底图切换
+     * @param {number} $event
+     */
+    onTdtBaseLayerChange($event: number) {
+        console.log($event);
+    }
+
+    /**
+     * esri地图加载完成
+     * @param $event
+     */
+    onEsriMapReady($event: ENgxEsriMapComponent) {
+        this.esriMapComponent = $event;
+        this.esriMap = this.esriMapComponent.map;
+    }
+
+    /**
+     * esri底图切换
+     * @param {number} $event
+     */
+    onEsriBaseLayerChange($event: number) {
+        console.log($event);
     }
 	```
 
@@ -81,11 +159,11 @@
 
 - `proxyUrl`（`string?='proxy.jsp'`） - 代理页面的路径。如果出现跨域的问题，请检查是否正确设置代理路径
 
-- `mapUrl`（`string[] | string='http://server.arcgisonline.com/ArcGIS/rest/services/ESRI_StreetMap_World_2D/MapServer'`） - 基础底图路径，如 `mapType='tdt'`，则 mapUrl 可从这四种地图类型 `vec（矢量图层）, cva（矢量标注）, img（影像图层）, cia（影像标注）` 通过数组形式组合使用。mapType='esri'，则 mapUrl 是完整的 ArcGIS 切片地图服务路径
+- `mapUrl`（`string[] | string='http://server.arcgisonline.com/ArcGIS/rest/services/ESRI_StreetMap_World_2D/MapServer'`） - 基础底图路径，如 `mapType='tdt'`，则 mapUrl 可从这四种地图类型 `vec（矢量图层）, cva（矢量标注）, img（影像图层）, cia（影像标注）` 通过数组形式组合使用。如 `mapType='google'`，则 mapUrl 可从这三种地图类型 `m（矢量图层）, p（地形图层）, y（影像图层）` 中选择。mapType='esri'，则 mapUrl 是完整的 ArcGIS 切片地图服务路径
 
-- `submapUrl`（`any[]`）- 其它切换的底图路径，如 `mapType='tdt'`，则 submapUrl 可从这四种地图类型 `vec（矢量图层）, cva（矢量标注）, img（影像图层）, cia（影像标注）` 通过数组形式组合使用。mapType='esri'，则 submapUrl 是完整的 ArcGIS 切片地图服务路径的数组
+- `submapUrl`（`any[]`）- 其它切换的底图路径，如 `mapType='tdt'`，则 submapUrl 可从这四种地图类型 `vec（矢量图层）, cva（矢量标注）, img（影像图层）, cia（影像标注）` 通过数组形式组合使用。如 `mapType='google'`，则 mapUrl 可从这三种地图类型 `m（矢量图层）, p（地形图层）, y（影像图层）` 中选择。mapType='esri'，则 submapUrl 是完整的 ArcGIS 切片地图服务路径的数组
 
-- `mapType`（`string?='esri'`） - 基础底图类型，`tdt`：天地图，`esri`：esri 地图服务
+- `mapType`（`string?='esri'`） - 基础底图类型，`tdt`：天地图（wkid: 4326），`google`：谷歌地图（wkid: 102113），`esri`：esri 地图服务（wkid: 看具体服务wkid）
 
 - `geoUrl`（`string?='http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer'`） - 几何服务路径，默认是在线路径，最好配置自己的路径
 
