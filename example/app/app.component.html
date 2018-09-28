@@ -48,6 +48,17 @@
 			(baseLayerChange)="onEsriBaseLayerChange($event)"
 			(mapReady)="onEsriMapReady($event)">
 		</e-ngx-esrimap>
+		<h2>扩展图层示例</h2>
+		<hr>
+		<e-ngx-esrimap
+				[mapType]="'tdt'"
+				[mapUrl]="['img','cia']"
+				[initExtent]="{xmax: 158.3750425624388, xmin: 52.90629256243881, ymax: 60.19111505022912, ymin: 7.456740050229122}"
+				[gisApiUrl]="gisApiUrl"
+				[geoUrl]="geoUrl"
+				[esriCSSUrl]="esriCSSUrl"
+				(mapReady)="onMapReady($event)">
+		</e-ngx-esrimap>
 		<br>
 	</div>
 </div>

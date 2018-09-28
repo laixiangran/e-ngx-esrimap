@@ -1,6 +1,6 @@
 {
   "name": "e-ngx-esrimap",
-  "version": "5.2.0",
+  "version": "5.3.0",
   "description": "基于Angular的二维地图组件，使用的地图API是ArcGIS API for JavaScript v3.x（>=3.14）",
   "keywords": [
     "angular",
@@ -23,7 +23,7 @@
     "url": "https://github.com/laixiangran/e-ngx-esrimap/issues"
   },
   "scripts": {
-    "release": "gulp prepublish && ngc && gulp copy:extras && npm publish",
+    "release": "gulp prepublish && ngc && gulp copy:assets",
     "start": "ng serve -o",
     "build-test": "ng build --prod --env=test --aot",
     "build-prod": "ng build --prod --env=prod --aot"
