@@ -16,12 +16,12 @@ var clean = require('gulp-clean');
 
 var config = {
 	src: './src',
-	dest: './dist',
+	dist: './dist',
 	aot: './aot'
 };
 
 gulp.task('clean:dist', function () {
-	return del.sync(config.dest, config.aot);
+	return del.sync(config.dist, config.aot);
 });
 
 gulp.task('copy:src', ['clean:dist'], function () {
@@ -35,10 +35,15 @@ gulp.task('copy:src', ['clean:dist'], function () {
 		.pipe(gulp.dest(config.aot));
 });
 
+gulp.task('copy:extras', function () {
+    return gulp.src([config.aot + '/extras/*.*'])
+        .pipe(gulp.dest(config.dist + '/extras'));
+});
+
 gulp.task('ng2:inline', ['copy:src'], function () {
 	return gulp.src([config.aot + '/**/*.ts'])
 		.pipe(inlineNg2Template({useRelativePaths: true, target: 'es5'}))
-		.pipe(gulp.dest(config.aot + '/'));
+		.pipe(gulp.dest(config.dist + '/'));
 });
 
 gulp.task('prepublish', function (cb) {

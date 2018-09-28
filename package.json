@@ -1,71 +1,71 @@
 {
-	"name": "e-ngx-esrimap",
-	"version": "5.1.0",
-	"description": "基于Angular的二维地图组件，使用的地图API是ArcGIS API for JavaScript v3.x（>=3.14）",
-	"keywords": [
-		"angular",
-		"ArcGIS API for JavaScript",
-		"laixiangran"
-	],
-	"homepage": "https://github.com/laixiangran/e-ngx-esrimap#readme",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/laixiangran/e-ngx-esrimap.git"
-	},
-	"author": {
-		"name": "赖祥燃",
-		"email": "laixiangran@163.com",
-		"bolg": "http://www.cnblogs.com/laixiangran",
-		"homepage": "http://www.laixiangran.cn"
-	},
-	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/laixiangran/e-ngx-esrimap/issues"
-	},
-	"scripts": {
-		"release": "gulp prepublish && ngc && npm publish",
-		"start": "ng serve -o",
-		"build-test": "ng build --prod --env=test --aot",
-		"build-prod": "ng build --prod --env=prod --aot"
-	},
-	"module": "dist/index.js",
-	"typings": "dist/index.d.ts",
-	"dependencies": {
-		"@types/arcgis-js-api": "^3.22.0",
-		"font-awesome": "^4.7.0"
-	},
-	"devDependencies": {
-		"@angular/core": "^5.0.0",
-		"@angular/common": "^5.0.0",
-		"@angular/compiler": "^5.0.0",
-		"@angular/forms": "^5.0.0",
-		"@angular/http": "^5.0.0",
-		"@angular/platform-browser": "^5.0.0",
-		"@angular/platform-browser-dynamic": "^5.0.0",
-		"@angular/router": "^5.0.0",
-		"@angular/compiler-cli": "^5.0.0",
-		"@angular/animations": "^5.0.0",
-		"@angular/cli": "^1.5.0",
-		"rxjs": "^5.5.0",
-		"zone.js": "^0.8.14",
-		"codelyzer": "^4.0.1",
-		"stylelint": "^8.2.0",
-		"stylelint-scss": "^2.1.0",
-		"ts-node": "^3.2.0",
-		"tslint": "^5.7.0",
-		"typescript": "2.4.2",
-		"@types/node": "^6.0.60",
-		"classlist.js": "^1.1.20150312",
-		"intl": "^1.2.5",
-		"web-animations-js": "^2.2.5",
-		"core-js": "^2.4.1",
-		"del": "^2.2.2",
-		"gulp": "^3.9.1",
-		"gulp-clean": "^0.3.2",
-		"gulp-if": "^2.0.2",
-		"gulp-inline-ng2-template": "^4.0.0",
-		"gulp-rename": "^1.2.2",
-		"gulp-sass": "^3.1.0",
-		"run-sequence": "^1.2.2"
-	}
+  "name": "e-ngx-esrimap",
+  "version": "5.2.0",
+  "description": "基于Angular的二维地图组件，使用的地图API是ArcGIS API for JavaScript v3.x（>=3.14）",
+  "keywords": [
+    "angular",
+    "ArcGIS API for JavaScript",
+    "laixiangran"
+  ],
+  "homepage": "https://github.com/laixiangran/e-ngx-esrimap#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/laixiangran/e-ngx-esrimap.git"
+  },
+  "author": {
+    "name": "赖祥燃",
+    "email": "laixiangran@163.com",
+    "bolg": "http://www.cnblogs.com/laixiangran",
+    "homepage": "http://www.laixiangran.cn"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/laixiangran/e-ngx-esrimap/issues"
+  },
+  "scripts": {
+    "release": "gulp prepublish && ngc && gulp copy:extras && npm publish",
+    "start": "ng serve -o",
+    "build-test": "ng build --prod --env=test --aot",
+    "build-prod": "ng build --prod --env=prod --aot"
+  },
+  "module": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "dependencies": {
+    "@types/arcgis-js-api": "^3.22.0",
+    "font-awesome": "^4.7.0"
+  },
+  "devDependencies": {
+    "@angular/animations": "^5.0.0",
+    "@angular/cli": "^1.5.0",
+    "@angular/common": "^5.0.0",
+    "@angular/compiler": "^5.0.0",
+    "@angular/compiler-cli": "^5.0.0",
+    "@angular/core": "^5.0.0",
+    "@angular/forms": "^5.0.0",
+    "@angular/http": "^5.0.0",
+    "@angular/platform-browser": "^5.0.0",
+    "@angular/platform-browser-dynamic": "^5.0.0",
+    "@angular/router": "^5.0.0",
+    "@types/node": "^6.0.60",
+    "classlist.js": "^1.1.20150312",
+    "codelyzer": "^4.0.1",
+    "core-js": "^2.4.1",
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.3.2",
+    "gulp-if": "^2.0.2",
+    "gulp-inline-ng2-template": "^4.0.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^3.1.0",
+    "intl": "^1.2.5",
+    "run-sequence": "^1.2.2",
+    "rxjs": "^5.5.0",
+    "stylelint": "^8.2.0",
+    "stylelint-scss": "^2.1.0",
+    "ts-node": "^3.2.0",
+    "tslint": "^5.7.0",
+    "typescript": "2.4.2",
+    "web-animations-js": "^2.2.5",
+    "zone.js": "^0.8.14"
+  }
 }

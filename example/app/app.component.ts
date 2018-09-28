@@ -28,23 +28,6 @@ export class AppComponent implements OnInit {
 	}
 
 	/**
-	 * 谷歌地图加载完成
-	 * @param $event
-	 */
-	onGoogleMapReady($event: ENgxEsriMapComponent) {
-		this.googleMapComponent = $event;
-		this.googleMap = this.googleMapComponent.map;
-	}
-
-	/**
-	 * 谷歌底图切换
-	 * @param {number} $event
-	 */
-	onGoogleBaseLayerChange($event: number) {
-		console.log($event);
-	}
-
-	/**
 	 * 天地图地图加载完成
 	 * @param $event
 	 */
@@ -59,6 +42,23 @@ export class AppComponent implements OnInit {
 	 * @param {number} $event
 	 */
 	onTdtBaseLayerChange($event: number) {
+		console.log($event);
+	}
+
+	/**
+	 * 谷歌地图加载完成
+	 * @param $event
+	 */
+	onGoogleMapReady($event: ENgxEsriMapComponent) {
+		this.googleMapComponent = $event;
+		this.googleMap = this.googleMapComponent.map;
+	}
+
+	/**
+	 * 谷歌底图切换
+	 * @param {number} $event
+	 */
+	onGoogleBaseLayerChange($event: number) {
 		console.log($event);
 	}
 

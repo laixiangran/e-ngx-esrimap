@@ -280,6 +280,79 @@ Draw: any;
 
 - `setExtent(extent: any, fit: boolean = false): Deferred` - 设置地图范围
 
+### 扩展图层
+
+在下载的好的组件包中（dist/extras）中有一些扩展图层，如聚合图层（ClusterLayer.js）等等，针对特定需求可直接使用。
+
+**使用方式：将 dist/extras 文件夹拷贝到部署好的 arcgis javascript API 中即与 init.js 同级的目录中，然后就可以导入使用扩展图层了。**
+
+- `ClusterLayer` - 聚合图层。将一定范围内的点对象聚合在一起，使用数字表示当前位置重叠的点对象数量。
+
+```javascript
+loadEsriModules(['extras/ClusterLayer', 'esri/renderers/ClassBreaksRenderer']).then(([ClusterLayer, ClassBreaksRenderer]) => {
+    // ClusterLayer options:
+    // 	data:  Object[]
+    //     Array of objects. Required. Object are required to have properties named x, y and attributes. The x and y coordinates have to be numbers that represent a points coordinates.
+    //   distance:  Number?
+    //     Optional. The max number of pixels between points to group points in the same cluster. Default value is 50.
+    //   labelColor:  String?
+    //     Optional. Hex string or array of rgba values used as the color for cluster labels. Default value is #fff (white).
+    //   labelOffset:  String?
+    //     Optional. Number of pixels to shift a cluster label vertically. Defaults to -5 to align labels with circle symbols. Does not work in IE.
+    //   resolution:  Number
+    //     Required. Width of a pixel in map coordinates. Example of how to calculate:
+    //     map.extent.getWidth() / map.width
+    //   showSingles:  Boolean?
+    //     Optional. Whether or graphics should be displayed when a cluster graphic is clicked. Default is true.
+    //   singleSymbol:  MarkerSymbol?
+    //     Marker Symbol (picture or simple). Optional. Symbol to use for graphics that represent single points. Default is a small gray SimpleMarkerSymbol.
+    //   singleTemplate:  PopupTemplate?
+    //     PopupTemplate</a>. Optional. Popup template used to format attributes for graphics that represent single points. Default shows all attributes as "attribute = value" (not recommended).
+    //   maxSingles:  Number?
+    //     Optional. Threshold for whether or not to show graphics for points in a cluster. Default is 1000.
+    //   webmap:  Boolean?
+    //     Optional. Whether or not the map is from an ArcGIS.com webmap. Default is false.
+    //   spatialReference:  SpatialReference?
+    //     Optional. Spatial reference for all graphics in the layer. This has to match the spatial reference of the map. Default is 102100. Omit this if the map uses basemaps in web mercator.
+    
+    // 初始化图层
+    const datas: any[] = [{
+        x: 116,
+        y: 40,
+        attributes: {}
+    }, {
+        x: 116,
+        y: 39,
+        attributes: {}
+    }, {
+        x: 116,
+        y: 40,
+        attributes: {}
+    }];
+    const options = {
+        'id': 'clusters',
+        'data': datas,
+        'distance': 100,
+        'showSingles': false,
+        'labelColor': '#fff',
+        'labelOffset': 10,
+        'resolution': this.tdtMap.extent.getWidth() / this.tdtMap.width,
+        'spatialReference': this.tdtMap.spatialReference
+    };
+    const clusterLayer = new ClusterLayer(options); // 初始化聚合图层
+    this.tdtMap.addLayer(clusterLayer);
+
+    // 设置符号
+    const defaultSym = new this.tdtMapComponent.SimpleMarkerSymbol().setSize(4);
+    const renderer = new ClassBreaksRenderer(defaultSym, 'clusterCount');
+    const tenders = new this.tdtMapComponent.PictureMarkerSymbol('assets/images/tenders.png', 40, 40).setOffset(0, 15);
+    const tenders_bg = new this.tdtMapComponent.PictureMarkerSymbol('assets/images/tenders_bg.png', 40, 40).setOffset(0, 15);
+    renderer.addBreak(0, 1, tenders);
+    renderer.addBreak(2, 99999999, tenders_bg);
+    clusterLayer.setRenderer(renderer);
+});
+```
+
 ## Develop
 
 	```shell
