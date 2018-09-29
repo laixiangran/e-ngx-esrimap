@@ -20,10 +20,7 @@ define(["dojo/_base/declare", "dojo/_base/lang", "esri/geometry/Point", "esri/ge
                 var t = o._map.toMap(new i(e[0], e[1]));
                 return [t.lng, t.lat]
             }, o.initECharts = function () {
-                return o._ec = t.init.apply(o, arguments), o._ec.Geo.prototype.dataToPoint = function (e) {
-                    var t = new n(e[0], e[1]), i = o._map.toScreen(t);
-                    return [i.x, i.y]
-                }, o._bindEvent(), o._ec
+                return o._ec = t.init.apply(o, arguments), o._bindEvent(), o._ec
             }, o.getECharts = function () {return o._ec}, o.setOption = function (e, t) {o._option = e, o._ec.setOption(e, t)}, o._bindEvent = function () {
                 o._map.on("zoom-end", function (e) {o._ec.resize(), o._echartsContainer.style.visibility = "visible"}), o._map.on("zoom-start", function (e) {o._echartsContainer.style.visibility = "hidden"}), o._map.on("pan", function (e) {o._echartsContainer.style.visibility = "hidden"}), o._map.on("pan-end", function (e) {o._ec.resize(), o._echartsContainer.style.visibility = "visible"}), o._map.on("resize", function () {
                     var e = o._echartsContainer.parentNode.parentNode.parentNode;

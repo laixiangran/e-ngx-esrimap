@@ -16,9 +16,7 @@
 				"./styles.scss",
 				"../node_modules/font-awesome/css/font-awesome.min.css"
 			],
-			"scripts": [
-				"../src/echarts/echarts3-ext.js"
-			],
+			"scripts": [],
 			"environmentSource": "environments/environment.ts",
 			"environments": {
 				"dev": "environments/environment.ts",

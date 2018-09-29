@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '../environments/environment';
 import { ENgxEsriMapComponent } from '../../src/e-ngx-esrimap.component';
-
-declare let echarts: any;
+import * as echarts from 'echarts';
 
 @Component({
 	selector: 'app-root',
@@ -411,6 +410,43 @@ export class AppComponent implements OnInit {
 		'武汉': [114.31, 30.52],
 		'大庆': [125.03, 46.58]
 	};
+	geoCoordMap2 = {
+		'东城区': [116.418757, 39.937544],
+		'西城区': [116.366794, 39.910309],
+		'朝阳区': [116.486409, 39.991489],
+		'丰台区': [116.286968, 39.863642],
+		'石景山区': [116.170445, 39.974601],
+		'海淀区': [116.280316, 40.039074],
+		'门头沟区': [115.905381, 40.009183],
+		'房山区': [115.701157, 39.735535],
+		'通州区': [116.758603, 39.802486],
+		'顺义区': [116.753525, 40.128936],
+		'昌平区': [116.235906, 40.318085],
+		'大兴区': [116.338033, 39.658908],
+		'怀柔区': [116.607122, 40.524272],
+		'平谷区': [117.112335, 40.244783],
+		'密云区': [116.943352, 40.477362],
+		'延庆区': [115.985006, 40.465325]
+	};
+	rawData2 = [
+		['东城区', 10, 20, 30],
+		['西城区', 10, 20, 30],
+		['朝阳区', 10, 20, 30],
+		['丰台区', 10, 20, 30],
+		['石景山区', 10, 20, 30],
+		['海淀区', 10, 20, 30],
+		['门头沟区', 10, 20, 30],
+		['房山区', 10, 20, 30],
+		['通州区', 10, 20, 30],
+		['顺义区', 10, 20, 30],
+		['昌平区', 10, 20, 30],
+		['大兴区', 10, 20, 30],
+		['怀柔区', 10, 20, 30],
+		['平谷区', 10, 20, 30],
+		['密云区', 10, 20, 30],
+		['延庆区', 10, 20, 30]
+	];
+	overlay2: any;
 
 	constructor() {
 	}
@@ -481,7 +517,7 @@ export class AppComponent implements OnInit {
 			this.Echarts3Layer = Echarts3Layer;
 			this.ClusterLayer = ClusterLayer;
 			this.ClassBreaksRenderer = ClassBreaksRenderer;
-			this.echarts3LayerDemo1();
+			this.echarts3LayerDemo2();
 			this.clusterLayerDemo();
 		});
 	}
@@ -513,24 +549,6 @@ export class AppComponent implements OnInit {
 				data: ['pm2.5', 'Top 5'],
 				textStyle: {
 					color: '#fff'
-				}
-			},
-			geo: {
-				map: '',
-				label: {
-					emphasis: {
-						show: false
-					}
-				},
-				roam: true,
-				itemStyle: {
-					normal: {
-						areaColor: '#323c48',
-						borderColor: '#111'
-					},
-					emphasis: {
-						areaColor: '#2a333d'
-					}
 				}
 			},
 			series: [
@@ -609,6 +627,159 @@ export class AppComponent implements OnInit {
 		}
 		return res;
 	};
+
+	echarts3LayerDemo2() {
+		this.overlay2 = new this.Echarts3Layer(this.map, echarts);
+		const chartsContainer2 = this.overlay2.getEchartsContainer();
+		const myChart2 = this.overlay2.initECharts(chartsContainer2);
+		const option2 = {
+			animation: false,
+			tooltip: {
+				trigger: 'axis'
+			},
+			series: []
+		};
+		setTimeout(this.renderEachCity.bind(this));
+		const throttledRenderEachCity = this.throttle(this.renderEachCity.bind(this), 0, null);
+		this.map.on('extent-change', throttledRenderEachCity);
+
+		// 使用刚指定的配置项和数据显示图表。
+		this.overlay2.setOption(option2);
+	}
+
+	/**
+	 * 缩放和拖拽
+	 * @param fn
+	 * @param delay
+	 * @param debounce
+	 * @returns {() => void}
+	 */
+	throttle(fn, delay, debounce) {
+		let currCall;
+		let lastCall = 0;
+		let lastExec = 0;
+		let timer = null;
+		let diff;
+		let scope;
+		let args;
+		delay = delay || 0;
+
+		function exec() {
+			lastExec = (new Date()).getTime();
+			timer = null;
+			fn.apply(scope, args || []);
+		}
+
+		const cb = function () {
+			currCall = (new Date()).getTime();
+			scope = this;
+			args = arguments;
+			diff = currCall - (debounce ? lastCall : lastExec) - delay;
+			clearTimeout(timer);
+			if (debounce) {
+				timer = setTimeout(exec, delay);
+			} else {
+				if (diff >= 0) {
+					exec();
+				} else {
+					timer = setTimeout(exec, -diff);
+				}
+			}
+			lastCall = currCall;
+		};
+		return cb;
+	}
+
+	renderEachCity() {
+		const option3: any = {
+			xAxis: [],
+			yAxis: [],
+			grid: [],
+			series: []
+		};
+		this.rawData2.forEach((dataItem, index) => {
+			const geoCoord = this.geoCoordMap2[dataItem[0]];
+			const screenPoint = this.map.toScreen(new this.mapComponent.Point(geoCoord[0], geoCoord[1], this.map.spatialReference));
+			const coord = [screenPoint.x, screenPoint.y];
+			const inflationData = [30, 50, 20];
+			const idx: string = index + '';
+			option3.xAxis.push({
+				id: idx,
+				gridId: idx,
+				type: 'category',
+				name: dataItem[0],
+				nameLocation: 'middle',
+				nameGap: 3,
+				splitLine: {
+					show: false
+				},
+				axisTick: {
+					show: false
+				},
+				axisLabel: {
+					show: false
+				},
+				axisLine: {
+					onZero: false,
+					lineStyle: {
+						color: '#fcfcfc'
+					}
+				},
+				// data: xAxisCategory,
+				data: ['数据A', '数据B', '数据C'],
+				z: 100
+
+			});
+			option3.yAxis.push({
+				id: idx,
+				gridId: idx,
+				splitLine: {
+					show: false
+				},
+				axisTick: {
+					show: false
+				},
+				axisLabel: {
+					show: false
+				},
+				axisLine: {
+					show: false,
+					lineStyle: {
+						color: '#1C70B6'
+					}
+				},
+				z: 100
+			});
+			option3.grid.push({
+				id: idx,
+				width: 40,
+				height: 50,
+				left: coord[0] - 15,
+				top: coord[1] - 15,
+				z: 100
+			});
+			option3.series.push({
+				id: idx,
+				type: 'bar',
+				xAxisId: idx,
+				yAxisId: idx,
+				barGap: 0,
+				barCategoryGap: 0,
+				data: inflationData,
+				z: 100,
+				itemStyle: {
+					normal: {
+						color: (params) => {
+							// 柱状图每根柱子颜色
+							const colorList = ['#F75D5D', '#59ED4F', '#4C91E7'];
+							return colorList[params.dataIndex];
+						}
+					}
+				}
+			});
+		});
+		this.overlay2.setOption(option3);
+	}
 
 	/**
 	 * 聚合图层（ClusterLayer）示例
