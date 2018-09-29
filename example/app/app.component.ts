@@ -551,6 +551,10 @@ export class AppComponent implements OnInit {
 					color: '#fff'
 				}
 			},
+			geo: {
+				map: '',
+				roam: true
+			},
 			series: [
 				{
 					name: 'pm2.5',
@@ -636,6 +640,10 @@ export class AppComponent implements OnInit {
 			animation: false,
 			tooltip: {
 				trigger: 'axis'
+			},
+			geo: {
+				map: '',
+				roam: true
 			},
 			series: []
 		};
