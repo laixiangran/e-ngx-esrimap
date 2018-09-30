@@ -6,3 +6,4 @@
 export { ENgxEsriMapModule } from './e-ngx-esrimap.module';
 export { ENgxEsriMapComponent } from './e-ngx-esrimap.component';
 export { ENgxEsriMapLoaderService } from './e-ngx-esrimap-loader.service';
+export { EchartsLayer } from './layers/EchartsLayer';

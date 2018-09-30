@@ -6,12 +6,14 @@ import { ENgxEsriMapModule } from '../../src/e-ngx-esrimap.module';
 @NgModule({
 	imports: [
 		BrowserModule,
-		ENgxEsriMapModule,
+		ENgxEsriMapModule
 	],
 	declarations: [
 		AppComponent
 	],
-	bootstrap: [AppComponent]
+	bootstrap: [
+		AppComponent
+	]
 })
 export class AppModule {
 }

@@ -290,13 +290,11 @@ Draw: any;
 
 ### 扩展图层
 
-在下载的好的组件包中（dist/extras）中有一些扩展图层，如聚合图层（ClusterLayer.js）、echarts图层（Echarts3Layer.js）等等，针对特定需求可直接使用。
+在下载的好的组件包中（dist/extras）中有一些扩展图层，如聚合图层（ClusterLayer.js）等等，针对特定需求可直接使用。
 
 **使用方式：将 dist/extras 文件夹拷贝到部署好的 arcgis javascript API 中即与 init.js 同级的目录中，然后就可以导入使用扩展图层了。**
 
 - `ClusterLayer` - 聚合图层。将一定范围内的点对象聚合在一起，使用数字表示当前位置重叠的点对象数量。具体使用请看 `example` 下的示例。
-
-- `Echarts3Layer` - echarts图表图层。具体使用请看 `example` 下的示例。
 
 ## Develop
 

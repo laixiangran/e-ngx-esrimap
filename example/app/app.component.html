@@ -1,6 +1,17 @@
 <div class="app_main">
 	<h1>esrimap Component for Angular</h1>
-	<div style="height: 600px;">
+	<div style="height: 700px;">
+		<h2>扩展图层示例</h2>
+		<hr>
+		<e-ngx-esrimap
+				[mapType]="'tdt'"
+				[mapUrl]="['img','cia']"
+				[initExtent]="initExtent"
+				[gisApiUrl]="gisApiUrl"
+				[geoUrl]="geoUrl"
+				[esriCSSUrl]="esriCSSUrl"
+				(mapReady)="onMapReady($event)">
+		</e-ngx-esrimap>
 		<h2>天地图地图服务</h2>
 		<button (click)="tdtMapComponent.changeBaseLayer(0)">切换底图1</button>
 		<button (click)="tdtMapComponent.changeBaseLayer(1)">切换底图2</button>
@@ -47,17 +58,6 @@
 			[initExtent]="initExtent"
 			(baseLayerChange)="onEsriBaseLayerChange($event)"
 			(mapReady)="onEsriMapReady($event)">
-		</e-ngx-esrimap>
-		<h2>扩展图层示例</h2>
-		<hr>
-		<e-ngx-esrimap
-				[mapType]="'tdt'"
-				[mapUrl]="['img','cia']"
-				[initExtent]="initExtent"
-				[gisApiUrl]="gisApiUrl"
-				[geoUrl]="geoUrl"
-				[esriCSSUrl]="esriCSSUrl"
-				(mapReady)="onMapReady($event)">
 		</e-ngx-esrimap>
 		<br>
 	</div>
