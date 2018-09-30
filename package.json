@@ -23,7 +23,7 @@
     "url": "https://github.com/laixiangran/e-ngx-esrimap/issues"
   },
   "scripts": {
-    "release": "gulp prepublish && ngc && gulp copy:assets && npm publish",
+    "release": "gulp prepublish && ngc && gulp copy:extras && npm publish",
     "start": "ng serve -o",
     "build-test": "ng build --prod --env=test --aot",
     "build-prod": "ng build --prod --env=prod --aot"

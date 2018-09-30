@@ -40,15 +40,6 @@ gulp.task('copy:extras', function () {
         .pipe(gulp.dest(config.dist + '/extras'));
 });
 
-gulp.task('copy:echarts', function () {
-    return gulp.src([config.aot + '/echarts/*.*'])
-        .pipe(gulp.dest(config.dist + '/echarts'));
-});
-
-gulp.task('copy:assets', function (cb) {
-    runSequence(['copy:extras', 'copy:echarts'], cb);
-});
-
 gulp.task('ng2:inline', ['copy:src'], function () {
 	return gulp.src([config.aot + '/**/*.ts'])
 		.pipe(inlineNg2Template({useRelativePaths: true, target: 'es5'}))
