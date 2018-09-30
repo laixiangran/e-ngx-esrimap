@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '../environments/environment';
 import { ENgxEsriMapComponent } from '../../src/e-ngx-esrimap.component';
-import { EchartsLayerService } from '../../src/echarts-layer.service';
+import { EchartsLayerService } from './echarts-layer.service';
 
 @Component({
 	selector: 'app-root',
