@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { ENgxEsriMapModule } from '../../src/e-ngx-esrimap.module';
-import { EchartsLayerService } from '../../src/echarts-layer-service';
+import { EchartsLayerService } from '../../src/echarts-layer.service';
 
 @NgModule({
 	imports: [

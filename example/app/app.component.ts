@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '../environments/environment';
 import { ENgxEsriMapComponent } from '../../src/e-ngx-esrimap.component';
-import { EchartsLayerService } from '../../src/echarts-layer-service';
+import { EchartsLayerService } from '../../src/echarts-layer.service';
 
 @Component({
 	selector: 'app-root',
@@ -167,7 +167,7 @@ export class AppComponent implements OnInit {
 				barCategoryGap: 0
 			}
 		};
-		this.echartsLayerService.init(this.map, option, this.rawData);
+		this.echartsLayerService.init(this.mapComponent, option, this.rawData);
 	}
 
 	/**

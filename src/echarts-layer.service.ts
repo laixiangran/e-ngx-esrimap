@@ -3,12 +3,12 @@
  * homepage：http://www.laixiangran.cn.
  */
 
-import * as echarts from 'echarts';
 import { Injectable } from '@angular/core';
-import { ENgxEsriMapLoaderService } from './e-ngx-esrimap-loader.service';
+import * as echarts from 'echarts';
 
 @Injectable()
 export class EchartsLayerService {
+	mapComponent: any;
 	map: any;
 	echartsIntance: any;
 	echartsContainer: any;
@@ -19,11 +19,12 @@ export class EchartsLayerService {
 	pan: any;
 	panEnd: any;
 
-	constructor(private loaderService: ENgxEsriMapLoaderService) {
+	constructor() {
 	}
 
-	init(map: any, option: any, data: any[]) {
-		this.map = map;
+	init(mapComponent: any, option: any, data: any[]) {
+		this.mapComponent = mapComponent;
+		this.map = this.mapComponent.map;
 		this.data = data;
 		this.option = option;
 		this.addEvent();
@@ -118,46 +119,44 @@ export class EchartsLayerService {
 			grid: [],
 			series: []
 		});
-		this.loaderService.loadModules(['esri/geometry/Point']).then(([Point]) => {
-			this.data.forEach((data, index) => {
-				const screenPoint = this.map.toScreen(new Point(data[1], data[2], this.map.spatialReference));
-				const coord = [screenPoint.x, screenPoint.y];
-				const idx: string = index + '';
-				const opt = JSON.parse(JSON.stringify(this.option));
-				const xAxis = opt.xAxis;
-				const yAxis = opt.yAxis;
-				const grid = opt.grid;
-				const series = opt.series;
-				option.xAxis.push(Object.assign(xAxis, {
-					id: idx,
-					gridId: idx,
-					name: typeof xAxis.name !== 'undefined' ? data[0] : ''
-				}));
-				option.yAxis.push(Object.assign(yAxis, {
-					id: idx,
-					gridId: idx
-				}));
-				option.grid.push(Object.assign(grid, {
-					id: idx,
-					left: coord[0] - grid.width / 2,
-					top: coord[1] - grid.height / 2
-				}));
-				option.series.push(Object.assign(series, {
-					id: idx,
-					xAxisId: idx,
-					yAxisId: idx,
-					data: data.slice(3),
-					itemStyle: {
-						normal: {
-							color: (params) => {
-								const colorList = option.color;
-								return colorList[params.dataIndex];
-							}
+		this.data.forEach((data, index) => {
+			const screenPoint = this.map.toScreen(new this.mapComponent.Point(data[1], data[2], this.map.spatialReference));
+			const coord = [screenPoint.x, screenPoint.y];
+			const idx: string = index + '';
+			const opt = JSON.parse(JSON.stringify(this.option));
+			const xAxis = opt.xAxis;
+			const yAxis = opt.yAxis;
+			const grid = opt.grid;
+			const series = opt.series;
+			option.xAxis.push(Object.assign(xAxis, {
+				id: idx,
+				gridId: idx,
+				name: typeof xAxis.name !== 'undefined' ? data[0] : ''
+			}));
+			option.yAxis.push(Object.assign(yAxis, {
+				id: idx,
+				gridId: idx
+			}));
+			option.grid.push(Object.assign(grid, {
+				id: idx,
+				left: coord[0] - grid.width / 2,
+				top: coord[1] - grid.height / 2
+			}));
+			option.series.push(Object.assign(series, {
+				id: idx,
+				xAxisId: idx,
+				yAxisId: idx,
+				data: data.slice(3),
+				itemStyle: {
+					normal: {
+						color: (params) => {
+							const colorList = option.color;
+							return colorList[params.dataIndex];
 						}
 					}
-				}));
-			});
-			this.echartsIntance.setOption(option);
+				}
+			}));
 		});
+		this.echartsIntance.setOption(option);
 	}
 }
