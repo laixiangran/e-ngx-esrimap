@@ -4,26 +4,30 @@
  */
 
 import * as echarts from 'echarts';
-import { ENgxEsriMapLoaderService } from '../e-ngx-esrimap-loader.service';
+import { Injectable } from '@angular/core';
+import { ENgxEsriMapLoaderService } from './e-ngx-esrimap-loader.service';
 
-export class EchartsLayer {
+@Injectable()
+export class EchartsLayerService {
 	map: any;
 	echartsIntance: any;
 	echartsContainer: any;
 	option: any;
-	loaderService: any = new ENgxEsriMapLoaderService();
 	data: any[];
 	zoomStart: any;
 	zoomEnd: any;
 	pan: any;
 	panEnd: any;
 
-	constructor(map: any, option: any, data: any[]) {
+	constructor(private loaderService: ENgxEsriMapLoaderService) {
+	}
+
+	init(map: any, option: any, data: any[]) {
 		this.map = map;
 		this.data = data;
 		this.option = option;
 		this.addEvent();
-		this.init();
+		this.create();
 	}
 
 	/**
@@ -93,7 +97,7 @@ export class EchartsLayer {
 		this.render();
 	}
 
-	private init() {
+	private create() {
 		this.echartsContainer = document.createElement('div');
 		this.echartsContainer.style.position = 'absolute';
 		this.echartsContainer.style.height = this.map.height + 'px';

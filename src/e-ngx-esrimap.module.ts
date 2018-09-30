@@ -18,7 +18,9 @@ import { ENgxEsriMapLoaderService } from './e-ngx-esrimap-loader.service';
 	exports: [
 		ENgxEsriMapComponent
 	],
-	providers: [ENgxEsriMapLoaderService]
+	providers: [
+		ENgxEsriMapLoaderService
+	]
 })
 export class ENgxEsriMapModule {
 }

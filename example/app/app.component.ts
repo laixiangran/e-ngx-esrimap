@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '../environments/environment';
 import { ENgxEsriMapComponent } from '../../src/e-ngx-esrimap.component';
-import { EchartsLayer } from '../../src/layers/EchartsLayer';
+import { EchartsLayerService } from '../../src/echarts-layer-service';
 
 @Component({
 	selector: 'app-root',
@@ -25,7 +25,6 @@ export class AppComponent implements OnInit {
 	initExtent2: any = {xmax: 12980277.986602597, xmin: 12934415.769631553, ymax: 4864627.423165954, ymin: 4841696.314680432};
 	ClusterLayer: any;
 	ClassBreaksRenderer: any;
-	echartsLayer: EchartsLayer;
 	rawData = [
 		['东城区', 116.418757, 39.937544, 10, 20, 30],
 		['西城区', 116.366794, 39.910309, 10, 22, 30],
@@ -45,7 +44,7 @@ export class AppComponent implements OnInit {
 		['延庆区', 115.985006, 40.465325, 17, 20, 30]
 	];
 
-	constructor() {
+	constructor(public echartsLayerService: EchartsLayerService) {
 	}
 
 	ngOnInit() {
@@ -168,7 +167,7 @@ export class AppComponent implements OnInit {
 				barCategoryGap: 0
 			}
 		};
-		this.echartsLayer = new EchartsLayer(this.map, option, this.rawData);
+		this.echartsLayerService.init(this.map, option, this.rawData);
 	}
 
 	/**
