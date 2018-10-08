@@ -14,7 +14,7 @@ export class ENgxEsriMapLoaderService {
 	private bootstrap(callback?: (error: Error, dojoRequire?: any) => void, options = {} as any) {
 		// default options
 		if (!options.url) {
-			options.url = 'http://js.arcgis.com/3.14/';
+			options.url = 'http://js.arcgis.com/3.23/';
 		}
 
 		// don't reload API if it is already loaded or in the process of loading

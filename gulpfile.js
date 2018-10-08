@@ -43,7 +43,7 @@ gulp.task('copy:extras', function () {
 gulp.task('ng2:inline', ['copy:src'], function () {
 	return gulp.src([config.aot + '/**/*.ts'])
 		.pipe(inlineNg2Template({useRelativePaths: true, target: 'es5'}))
-		.pipe(gulp.dest(config.dist + '/'));
+		.pipe(gulp.dest(config.aot + '/'));
 });
 
 gulp.task('prepublish', function (cb) {
