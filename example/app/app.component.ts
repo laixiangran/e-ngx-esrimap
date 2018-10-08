@@ -123,9 +123,16 @@ export class AppComponent implements OnInit {
 				trigger: 'axis'
 			},
 			color: ['#F75D5D', '#59ED4F', '#4C91E7'],
-			geo: {},
+			geo: {
+			},
 			xAxis: {
 				type: 'category',
+				name: '',
+				nameLocation: 'middle',
+				nameGap: 3,
+				nameTextStyle: {
+					fontSize: 10
+				},
 				splitLine: {
 					show: false
 				},
@@ -138,7 +145,7 @@ export class AppComponent implements OnInit {
 				axisLine: {
 					onZero: false,
 					lineStyle: {
-						color: 'rgba(0, 0, 0, 0)'
+						color: '#ffffff'
 					}
 				},
 				data: ['数据A', '数据B', '数据C']
