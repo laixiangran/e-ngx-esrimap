@@ -48,4 +48,32 @@
             }
         }
     }
+
+    ::ng-deep {
+
+        // 美化 infoWindow 样式
+        .esriPopup {
+            .titlePane {
+                background-color: #F4F4F4;
+                color: #000000;
+                line-height: 40px;
+                padding-left: 10px;
+                font-weight: bold;
+                font-size: 16px;
+
+                .maximize,
+                .close {
+                    display: none;
+                }
+            }
+
+            .contentPane {
+                background-color: #FFFFFF;
+            }
+
+            .pointer.top {
+                background-color: #FFFFFF;
+            }
+        }
+    }
 }
