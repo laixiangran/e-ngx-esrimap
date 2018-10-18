@@ -67,12 +67,19 @@
                 }
             }
 
+            $fff: #FFFFFF;
+
             .contentPane {
-                background-color: #FFFFFF;
+                background-color: $fff;
+                padding: 0;
+            }
+
+            .actionsPane {
+                background-color: $fff;
             }
 
             .pointer.top {
-                background-color: #FFFFFF;
+                background-color: $fff;
             }
         }
     }
